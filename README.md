@@ -8,7 +8,7 @@ The [configuration files](vespa/config.ini) describes both the physical infrastr
 
 Each node of the infrastructure is represented as following :
 
-```bash
+```ini
 [infrastructurenodename]
 Type= (Machine|Hypervisor|VM)
 Interfaces= IP1, IP2, ...
@@ -18,7 +18,7 @@ The ``infrastructurenodename`` is the hostname of the object (as returned by the
 
 First, we define a single node in our infrastructure that will host all VESPA components :
 
-```bash
+```ini
 [laptop]
 Type= Machine
 #Interfaces= 10.10.10.200
@@ -29,7 +29,7 @@ Interfaces= 127.0.0.1
 
 The framework objects are represented as following :
 
-```bash
+```ini
 [frameworknodename]
 Location= [infrastructurenodename]
 Master= [masterframeworknodename]
@@ -38,7 +38,7 @@ Port= (UniquePort)
 
 The VESPA model requires a ``Vertical Orchestrator``, a ``Horizontal Orchestrator``, and ``Agents``. Thus we define a starter template :
 
-```bash
+```fini
 [VO]
 Location= laptop
 Master=
