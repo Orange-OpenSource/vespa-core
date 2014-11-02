@@ -26,5 +26,3 @@ class View():
 
 if __name__ == '__main__':
     view = View(Model())
-
-# http://orange-business.com/fr/entreprise/thematiques/cloud/animation/

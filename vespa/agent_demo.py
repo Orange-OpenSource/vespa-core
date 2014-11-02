@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # 
-# Module name: supervisor.py
+# Module name: agent.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
 #
@@ -20,13 +20,29 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with VESPA.  If not, see <http://www.gnu.org/licenses/>.
 
-import wx
-from SupervisorMainFrame import SupervisorMainFrame
+"""
+Agent representation
+"""
+import socket
+from node import Node
 
-if __name__ == '__main__':
-    app = wx.App(redirect=True, filename="logwx.txt")
-    top = SupervisorMainFrame(None)
-    top.Show()
-    app.MainLoop()
+class Agent_Node(Agent):
+    def __init__(self, name, host, port, master, run=True):
+        super(Agent_Node, self,).__init__(name, host, port, master, run)
 
-# http://orange-business.com/fr/entreprise/thematiques/cloud/animation/
+    def follow(thefile):
+	thefile.seek(0,2)      # Go to the end of the file
+	while True:
+	     line = thefile.readline()
+	     if not line:
+		 time.sleep(0.1)    # Sleep briefly
+		 continue
+	     yield line
+
+    def launch(self):
+	logfile = open("/home/dad/file")
+	loglines = follow(logfile)
+	keyword = "bilou"
+	for line in loglines:
+	    if keyword in line:
+		self.sendAlert("new_line#%s" % line)
