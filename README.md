@@ -38,7 +38,7 @@ Port= (UniquePort)
 
 The VESPA model requires a ``Vertical Orchestrator``, a ``Horizontal Orchestrator``, and ``Agents``. Thus we define a starter template :
 
-```fini
+```ini
 [VO]
 Location= laptop
 Master=
