@@ -1,0 +1,17 @@
+# VESPA
+
+Framework gestion autonomique
+
+## FAQ
+
+- Les noeuds s'arretent sur "[-] Error [Errno 99] Ne peut attribuer l'adresse demand\xc3\xa9e"
+
+Cette erreur est due au protocole qu'utilise VESPA, ou une socket est créée à chaque communication. S'il est utilisé de façon intensive, l'état `TIME_WAIT` TCP par défaut ne libère la socket qu'après 60 secondes.
+    % netstat -on | grep TIME_WAIT | wc -l
+    65882
+
+En attendant le choix définitif du protocole, il est possible d'utiliser quelques optimisations au niveau du noyau linux [http://serverfault.com/questions/212093/how-to-reduce-number-of-sockets-in-time-wait]:
+
+    echo 1 > /proc/sys/net/ipv4/tcp_tw_recycle
+    echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
+    echo 30 > /proc/sys/net/ipv4/tcp_fin_timeout

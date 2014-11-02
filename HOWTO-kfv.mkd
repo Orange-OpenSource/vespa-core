@@ -1,0 +1,192 @@
+# KungFuVisor
+
+## Noyau
+
+Récupération noyau:
+
+    wget http://www.kernel.org/pub/linux/kernel/v3.0/linux-3.4.4.tar.bz2
+    tar xf linux*.tar.bz2
+
+Compilation:
+
+    cd linux*
+    make mrproper
+    cp /proc/config.gz .
+    gunzip config.gz 
+    cp config .config
+    make oldconfig
+    export PATH="/usr/lib/ccache/bin/:$PATH"
+    make -j8
+
+## Infos KVM
+
+### Liens
+
+http://old.nabble.com/Where-is-the-entry-of-hypercalls-in-kvm--td28998042.html
+http://www.spinics.net/lists/kvm/msg37526.html
+Using io ports | http://www.makelinux.net/ldd3/chp-9-sect-2
+All port allocations show up in 
+    /proc/ioports
+http://ando-ruo.blogspot.fr/2012/04/hypercall-getting-through-from-kvm-to.html
+http://www.intel.com/assets/pdf/datasheet/290562.pdf
+
+### Try bug
+
+IOports:
+
+    [dad@p-stt-cloud-sharednode1 ~]$ cat /proc/ioports 
+    0000-001f : dma1
+    0020-0021 : pic1
+    0040-0043 : timer0
+    0050-0053 : timer1
+    0060-0060 : keyboard
+    0064-0064 : keyboard
+    0070-0071 : rtc0
+    0080-008f : dma page reg
+    00a0-00a1 : pic2
+    00c0-00df : dma2
+    00f0-00ff : fpu
+    0170-0177 : 0000:00:01.1
+      0170-0177 : ata_piix
+    01f0-01f7 : 0000:00:01.1
+      01f0-01f7 : ata_piix
+    0376-0376 : 0000:00:01.1
+      0376-0376 : ata_piix
+    03c0-03df : vga+
+    03f2-03f2 : floppy
+    03f4-03f5 : floppy
+    03f6-03f6 : 0000:00:01.1
+      03f6-03f6 : ata_piix
+    03f7-03f7 : floppy
+    03f8-03ff : serial
+    0cf8-0cff : PCI conf1
+    afe0-afe3 : ACPI GPE0_BLK
+    b000-b03f : 0000:00:01.3
+      b000-b003 : ACPI PM1a_EVT_BLK
+      b004-b005 : ACPI PM1a_CNT_BLK
+      b008-b00b : ACPI PM_TMR
+      b010-b015 : ACPI CPU throttle
+    b100-b10f : 0000:00:01.3
+      b100-b107 : piix4_smbus
+    c000-c0ff : 0000:00:03.0
+      c000-c0ff : 8139cp
+    c100-c11f : 0000:00:01.2
+      c100-c11f : uhci_hcd
+    c120-c13f : 0000:00:04.0
+      c120-c13f : virtio-pci
+    c140-c14f : 0000:00:01.1
+      c140-c14f : ata_piix
+
+code:
+
+    #include <sys/io.h>
+    #include <stdio.h>
+    #include <unistd.h>
+
+    int main(void)
+    {
+        unsigned int i, j;
+        FILE *f;
+        unsigned char type[1024];
+        unsigned int startport, endport;
+        unsigned int startval, endval;
+        unsigned int num_test, skip_test;
+
+        startval = 0x100;
+        endval   = 65535;
+        num_test = 0;
+        skip_test= 0;
+
+        if (iopl(3))
+        {
+            printf("[-] Unable to set lvl3\n");
+            return 1;
+        }
+
+        if (!(f = fopen("/proc/ioports", "r")))
+        {
+            printf ("[-] Unable to open ioports\n");
+            return 1;
+        }
+
+        /*
+        sztoread = 1024;
+        fread(&buf, sztoread, 1, f);
+        */
+        
+        while (skip_test--)
+            fscanf(f, "%x-%x : %[^\n]\n", &startport, &endport, type);
+
+        while (1)
+        {
+            fscanf(f, "%x-%x : %[^\n]\n", &startport, &endport, type);
+
+            printf("[%u] Fuzzing io 0x%04x-0x%04x : %s\n", num_test++, startport, endport, type);
+
+            for (i=startport; i<endport; i++)
+            {
+                printf("0x%04x\n", i);
+
+                for (j=startval; j<endval; j++)
+                    outl_p(j, i);
+            }
+
+            printf("[!] Waiting 3s\n");
+            sleep(3);
+        }
+
+        return 0;
+    }
+
+compile:
+
+    gcc -W -Wall -Wuninitialized -O2 -pedantic bug.c -o bug 
+
+### Info structure KVM
+
+localisation:
+
+    /include/linux/kvm_para.h
+    
+### Fichiers ioports LVM
+
+ioport.c
+    #  define LOG_IOPORT(fmt, ...) fprintf(stderr, fmt, ## __VA_ARGS__)
+    default_ioport_readb
+    default_ioport_writeb
+
+    [dad@p-stt-cloud3 qemu-kvm-1.0.1]$ ack default_ioport_writeb
+    ioport.c
+    58:static IOPortWriteFunc default_ioport_writeb, default_ioport_writew, default_ioport_writel;
+    76:        default_ioport_writeb,
+    92:static void default_ioport_writeb(void *opaque, uint32_t address, uint32_t data)
+
+    [dad@p-stt-cloud3 qemu-kvm-1.0.1]$ ack default_ioport_readb
+    ioport.c
+    57:static IOPortReadFunc default_ioport_readb, default_ioport_readw, default_ioport_readl;
+    63:        default_ioport_readb,
+    86:static uint32_t default_ioport_readb(void *opaque, uint32_t address)
+
+    [dad@p-stt-cloud3 qemu-kvm-1.0.1]$ ack IOPortReadFunc
+
+    ioport.h
+    38:typedef uint32_t (IOPortReadFunc)(void *opaque, uint32_t address);
+    42:                         IOPortReadFunc *func, void *opaque);
+
+    hw/vmport.c
+    42:    IOPortReadFunc *func[VMPORT_ENTRIES];
+    48:void vmport_register(unsigned char command, IOPortReadFunc *func, void *opaque)
+
+    hw/pc.h
+    113:void vmport_register(unsigned char command, IOPortReadFunc *func, void *opaque);
+
+    ioport.c
+    54:static IOPortReadFunc *ioport_read_table[3][MAX_IOPORTS];
+    57:static IOPortReadFunc default_ioport_readb, default_ioport_readw, default_ioport_readl;
+    62:    static IOPortReadFunc * const default_func[3] = {
+    67:    IOPortReadFunc *func = ioport_read_table[index][address];
+    143:                         IOPortReadFunc *func, void *opaque)
+
+    memory.h
+    136:    IOPortReadFunc *read;
+
