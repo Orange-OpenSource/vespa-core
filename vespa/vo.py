@@ -39,8 +39,6 @@ class VO(Node):
         #print "repr:" + repr(msg)
         source = msg.split("|")[1].split(">")[-2]
         message = msg.split(">")[-1]
-        # Global logger
-        self.alerts.append(msg)
         #
         # New node registered
         #

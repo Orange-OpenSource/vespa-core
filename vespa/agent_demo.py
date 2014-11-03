@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # 
-# Module name: agent.py
+# Module name: agent_demo.py
 # Version:     1.0
-# Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
+# Created:     03/11/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
 #
 # Copyright (C) 2010-2014 Orange
 #
@@ -25,12 +25,14 @@ Agent representation
 """
 import socket
 from node import Node
+from agent import Agent
+import time
 
-class Agent_Node(Agent):
+class Agent_Demo(Agent):
     def __init__(self, name, host, port, master, run=True):
-        super(Agent_Node, self,).__init__(name, host, port, master, run)
+        super(Agent_Demo, self,).__init__(name, host, port, master, run)
 
-    def follow(thefile):
+    def follow(self, thefile):
 	thefile.seek(0,2)      # Go to the end of the file
 	while True:
 	     line = thefile.readline()
@@ -41,7 +43,7 @@ class Agent_Node(Agent):
 
     def launch(self):
 	logfile = open("/home/dad/file")
-	loglines = follow(logfile)
+	loglines = self. follow(logfile)
 	keyword = "bilou"
 	for line in loglines:
 	    if keyword in line:
