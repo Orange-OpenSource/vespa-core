@@ -21,7 +21,7 @@ git clone https://github.com/Orange-OpenSource/vespa-core
 cd vespa-core
 ```
 
-A convenient way to start is to follow the tutorial and setup a local environment.
+A convenient way to start is to follow the [tutorial](tree/tutorial) and setup a local environment.
 
 ## API Reference
 
@@ -29,7 +29,7 @@ The API of nodes is described into the code headers, and will be available as a 
 
 ## Tests
 
-The tutorial delivers the basic of agent implementation and how to manage alerts on the Vertical Orchestrator.
+The [tutorial](tree/tutorial) delivers the basic of agent implementation and how to manage alerts on the Vertical Orchestrator.
 
 ## Contributors
 
