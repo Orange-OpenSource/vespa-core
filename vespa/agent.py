@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: agent.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -25,6 +25,7 @@ Agent representation
 """
 import socket
 from node import Node
+
 
 class Agent(Node):
     def __init__(self, name, host, port, master, run=True):

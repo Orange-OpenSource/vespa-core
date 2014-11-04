@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: view.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -20,11 +20,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with VESPA.  If not, see <http://www.gnu.org/licenses/>.
 
+
 class View():
     def __init__(self, model):
         self.model = model
 
 if __name__ == '__main__':
     view = View(Model())
-
-# http://orange-business.com/fr/entreprise/thematiques/cloud/animation/
