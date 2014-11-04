@@ -121,14 +121,17 @@ class PThread(Thread):
         """
         Destroy all slaves
         """
-        self.quitting = True
-        for _,s in self.current_links:
-            s.send("destroy|%s" % EOT_FLAG)
-        for slave in self.slaves:
-            self.sendRemotef(slave, "destroy|")
-        # WARNING, DESTROY ALL!
-        if self.master:
-            self.sendRemotef(self.master, "destroy|")
+        if self.quitting == False:
+            self.quitting = True
+            for r,s in self.current_links:
+                #s.send("destroy|%s" % EOT_FLAG)
+                self.socket_counter[r]+= 1
+                self.sendSocket(s, r, "destroy|")
+            for slave in self.slaves:
+                self.sendRemotef(slave, "destroy|")
+            # WARNING, DESTROY ALL!
+            if self.master:
+                self.sendRemotef(self.master, "destroy|")
 
     def register_alert_handler(self, handler):
         debug5("[%s] Added alert handler %s" % (self.name, handler))
@@ -217,15 +220,7 @@ class PThread(Thread):
                 """
                 This part is in beta, we will move toward AES GCM/EAX
                 """
-                iv = "%016i" % self.socket_counter[remote]
-                debug_crypto("[%s] Encrypt msg :: %s" % (self.name, iv))
-                cmsg, hmsg = self.__encrypt(msg, iv)
-                debug_crypto("[%s] b64ing msg" % self.name)
-                cmsg = base64.b64encode(cmsg)
-                hmsg = base64.b64encode(hmsg)
-                jsonmsg = {"cmsg":cmsg, "checksum":hmsg}
-                debug_comm("[%s] Sending msg" % self.name)
-                s.send( "%s%s" % (json.dumps(jsonmsg), EOT_FLAG) ) # json.dumps puis json/loads
+                self.sendSocket(s, remote, msg)
                 data = ""
                 if needack:
                     debug_comm("[%s] Waiting for recv and EOT_FLAG" % self.name)
@@ -254,6 +249,20 @@ class PThread(Thread):
                     debug_comm("[-] [%s] Error %s [%s][%s]" % (self.name, msg, errno, strerror))
                     raise
                     return []
+
+    def sendSocket(self, s, remote, msg):
+        """
+        Handle the socket (s.send) message and encryption routines.
+        """
+        iv = "%016i" % self.socket_counter[remote]
+        cmsg, hmsg = self.__encrypt(msg, iv)
+        debug_crypto("[%s] b64ing msg" % self.name)
+        cmsg = base64.b64encode(cmsg)
+        debug_crypto("[%s] Encrypt msg :: %s :: %s :: %s" % (self.name, remote, iv, cmsg))
+        hmsg = base64.b64encode(hmsg)
+        jsonmsg = {"cmsg":cmsg, "checksum":hmsg}
+        debug_comm("[%s] Sending msg" % self.name)
+        s.send( "%s%s" % (json.dumps(jsonmsg), EOT_FLAG) ) # json.dumps puis json/loads
 
     def worker(self, conn):
         """
@@ -287,13 +296,15 @@ class PThread(Thread):
                 cmsg = base64.b64decode(jsonmsg['cmsg'])
                 hmsg = base64.b64decode(jsonmsg['checksum'])
                 data = self.__decrypt(cmsg, iv, hmsg)
+                debug_crypto("[%sW%s] Counter :: %s" % (self.name, uniqid, self.wsocket_counter[uniqid]))
+                debug_crypto("[%sW%s] Data:: %s" % (self.name, uniqid, data))
                 self.wsocket_counter[uniqid]+= 1
                 # The counter can be desynchronized
                 try:
                     command = self.__get_method(data)
                     arguments = self.__get_arguments(data)
                 except:
-                    sys.stderr.write("Error with %s" % data)
+                    sys.stderr.write("[%sW%s] Error with %s" % (self.name, uniqid, data))
                     conn.close()
                     return
                 result = ""
