@@ -9,5 +9,5 @@ install:
 #  - pip install -r requirements.txt --use-mirrors
   - pip install pep8
 script:
-  - pep8 --exclude=migrations vespa-core
+  - pep8 --exclude=migrations vespa
 #  - ./vespa-core/vespa/starter.py
