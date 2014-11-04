@@ -34,7 +34,7 @@ class Agent_Demo(Agent):
 
     def follow(self, thefile):
 	thefile.seek(0,2)      # Go to the end of the file
-	while True:
+	while not self.quitting:
 	     line = thefile.readline()
 	     if not line:
 		 time.sleep(0.1)    # Sleep briefly
@@ -42,9 +42,9 @@ class Agent_Demo(Agent):
 	     yield line
 
     def launch(self):
-	logfile = open("/home/dad/file")
-	loglines = self. follow(logfile)
-	keyword = "bilou"
-	for line in loglines:
-	    if keyword in line:
-		self.sendAlert("new_line#%s" % line)
+        logfile = open("/home/dad/file")
+        loglines = self. follow(logfile)
+        keyword = "bilou"
+        for line in loglines:
+            if keyword in line:
+                self.sendAlert("new_line#%s" % line)

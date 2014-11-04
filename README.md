@@ -145,7 +145,7 @@ cd vespa
 python2 ./starter.py
 ```
 
-_NOTE_: The framework will hang if you quit using CTRL+C. You will need to do CTRL+Z and execute ``kill %``.
+_NOTE_: The framework may hang if you quit using CTRL+C. You will need to do CTRL+Z and execute ``kill %``.
 
 ## Creating an event
 
