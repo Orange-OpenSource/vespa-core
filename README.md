@@ -82,12 +82,12 @@ We first need an equivalent of the ``tail -f`` command:
 ```python
 def follow(self, thefile):
     thefile.seek(0,2)      # Go to the end of the file
-    while True:
-	 line = thefile.readline()
-	 if not line:
-	     time.sleep(0.1)    # Sleep briefly
-	     continue
-	 yield line
+    while not self.quitting:
+        line = thefile.readline()
+        if not line:
+            time.sleep(0.1)    # Sleep briefly
+            continue
+        yield line
 ```
 
 The Node class uses the ``run`` argument to specify if its role is Detection, Reaction or both. Here it is a Detection agent (run=True) that call the ``launch`` function during this startup. We can then define the function as :
@@ -122,15 +122,15 @@ def alert(self, msg):
 	self.sendRemotef(self.model, "alert|%s>%s" % (self.name, msg.split("|")[1]))
 
     if source == "Agent_Demo":
-	if "new_line" in message:
-	    args = message.split('#')
-	    line = args[1]
+    if "new_line" in message:
+        args = message.split('#')
+        line = args[1]
 
-	    #agent_demo = self.findNode("Agent_Demo")
-	    #self.sendRemotef(agent_controller, "alert_ip|%s#%s" % (ipobj['value'], mac))
-	    debug_info("Alert received: %s" % line)
-	else:
-	    self.sendRemotef(self.model, "alert|%s>Unexpected alert: %s" % (self.name, message))
+        #agent_demo = self.findNode("Agent_Demo")
+        #self.sendRemotef(agent_controller, "alert_ip|%s#%s" % (ipobj['value'], mac))
+        debug_info("Alert received: %s" % line)
+    else:
+        self.sendRemotef(self.model, "alert|%s>Unexpected alert: %s" % (self.name, message))
 ```
 
 This tutorial doesn't show how to send a request back to a Reaction agent. The comment lines hold the code needed to do it.
@@ -145,7 +145,7 @@ cd vespa
 python2 ./starter.py
 ```
 
-_NOTE_: The framework may hang if you quit using CTRL+C. You will need to do CTRL+Z and execute ``kill %``.
+_NOTE_: The framework may hang if you quit using CTRL+C. You will need to do CTRL+Z and kill the background job with ``kill %``.
 
 ## Creating an event
 
