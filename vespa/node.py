@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: node.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -27,6 +27,9 @@ Default config without backend
 
 Pthread is used as Profiler wrapper
 
+If you do not need profiling you may replace the PThread class with:
+    class Node(Thread):
+
 INTERNALS:
 
 """
@@ -53,13 +56,15 @@ LIST_ITEM_SEPARATOR = ':'
 LIST_SEPARATOR = '\r'
 RECV_LENGTH = 4096
 
-#class Node(Thread):
+
 class PThread(Thread):
     def __init__(self, name, host, port, master, run=True):
         Thread.__init__(self)
         self.host = host
         self.port = port
-        self.method_list = [method for method in dir(self) if callable(getattr(self, method)) and not method in dir(Thread)]
+        self.method_list = [method for method in dir(self)
+                            if callable(getattr(self, method))
+                            and method not in dir(Thread)]
         self.slaves = []
         self.master = master
         self.alert_handlers = []
@@ -68,12 +73,12 @@ class PThread(Thread):
         self.quitting = False
         self.threads = []
         self.interface_threads = []
-        #self.key = int("VESPAVESPAVESPA1".encode("hex"))
+        # self.key = int("VESPAVESPAVESPA1".encode("hex"))
         self.key = "VESPA"*6 + "12"
         if run:
             self.start()
-    	    t = ThreadWorker(target = self.launch)
-            #self.launch()
+            t = ThreadWorker(target=self.launch)
+            # self.launch()
             self.threads.append(t)
             t.start()
         self.name = name
@@ -105,27 +110,28 @@ class PThread(Thread):
     def register(self, name, host, port):
         debug5("[%s] Added slave %s" % (self.name, name))
         if (name, host, int(port)) not in self.slaves:
-            self.slaves.append( (name, host, int(port)) )
+            self.slaves.append((name, host, int(port)))
         else:
-            cl = [] 
-            for r,s in self.current_links:
+            cl = []
+            for r, s in self.current_links:
                 if r == (name, host, int(port)):
                     s.close()
                 else:
-                    cl.append( (r,s) )
+                    cl.append((r, s))
             self.current_links = cl
         if self.master:
-            self.sendRemotef(self.master, "alert|" + self.name + '>archi=New slave')
+            self.sendRemotef(self.master,
+                             'alert|%s>archi=New slave' % self.name)
 
     def destroy(self):
         """
         Destroy all slaves
         """
-        if self.quitting == False:
+        if self.quitting is False:
             self.quitting = True
-            for r,s in self.current_links:
-                #s.send("destroy|%s" % EOT_FLAG)
-                self.socket_counter[r]+= 1
+            for r, s in self.current_links:
+                # s.send("destroy|%s" % EOT_FLAG)
+                self.socket_counter[r] += 1
                 self.sendSocket(s, r, "destroy|")
             for slave in self.slaves:
                 self.sendRemotef(slave, "destroy|")
@@ -135,7 +141,7 @@ class PThread(Thread):
 
     def register_alert_handler(self, handler):
         debug5("[%s] Added alert handler %s" % (self.name, handler))
-        self.alert_handlers.append( handler )
+        self.alert_handlers.append(handler)
 
     def findNode(self, name):
         for slave in self.slaves:
@@ -154,7 +160,7 @@ class PThread(Thread):
         """
         # Handling overloaded methods
         for method in self.method_list:
-            #if msg == method:
+            # if msg == method:
             #    debug1("BOUNGA")
             #    return self.__getattribute__(method)()
             if self.__get_method(msg) == method:
@@ -163,7 +169,7 @@ class PThread(Thread):
                     return self.__getattribute__(method)()
                 else:
                     return self.__getattribute__(method)(*arguments)
-        data = [ "help#" ]
+        data = ["help#"]
         if self.have_backend and self.is_backend_reachable:
             # Connection to backend
             # For C : data = [ self.sendRemote(self.backend, msg) ]
@@ -171,8 +177,10 @@ class PThread(Thread):
             debug_comm('Received 1 %s' % repr(data))
         if msg == 'help|':
             for method in self.method_list:
-                if not method[0:1] == '_' and method not in data[0] and not method == "send":
-                    data[0]+= method + '#'
+                if (not method[0:1] == '_'
+                        and method not in data[0]
+                        and not method == "send"):
+                    data[0] += method + '#'
         return data
 
     def sendAlert(self, msg):
@@ -191,11 +199,11 @@ class PThread(Thread):
         """
         return self.sendRemote(remote, msg, needack=False)
 
-    def sendRemote(self, remote, msg, needack = True):
+    def sendRemote(self, remote, msg, needack=True):
         """
         Send a message to a node (remote) using the node.desc() string.
         This function deals with sockets directly.
-        
+
         Default behavior is to wait data as acknowledgement (needack).
         It is only modified for messages needing fast delivery and processing
         such as alerts.
@@ -203,50 +211,55 @@ class PThread(Thread):
         name, host, port = remote
         while 1:
             try:
-                debug_comm_len("[%s] Trying to send: %s -> %s" % (self.name, remote, msg))
+                debug_comm_len("[%s] Trying to send: %s -> %s" %
+                               (self.name, remote, msg))
                 # Trying to reuse socket (reducing socket number)
-                if remote not in [ r for r,_ in self.current_links ]:
+                if remote not in [r for r, _ in self.current_links]:
                     debug_comm("[%s] Creating socket" % self.name)
                     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    self.current_links.append( (remote, s) )
+                    self.current_links.append((remote, s))
                     # print '%s:%s' % (host, port)
-                    s.connect( (host, port) )
+                    s.connect((host, port))
                     self.socket_counter[remote] = 0
                 else:
                     debug_comm("[%s] Socket exist, reusing" % self.name)
-                    s = [ s for r,s in self.current_links if remote == r ][0]
+                    s = [s for r, s in self.current_links if remote == r][0]
                     debug_comm("[%s] >> %s" % (self.name, str(s)))
-                    self.socket_counter[remote]+= 1
+                    self.socket_counter[remote] += 1
                 """
                 This part is in beta, we will move toward AES GCM/EAX
                 """
                 self.sendSocket(s, remote, msg)
                 data = ""
                 if needack:
-                    debug_comm("[%s] Waiting for recv and EOT_FLAG" % self.name)
-                    while not EOT_FLAG in data:
+                    debug_comm("[%s] Waiting for recv and EOT_FLAG" %
+                               self.name)
+                    while EOT_FLAG not in data:
                         data += s.recv(RECV_LENGTH)
                     data = data.replace(EOT_FLAG, "")
-                    #s.shutdown(socket.SHUT_RDWR)
-                    #s._sock.close()
-                    #s.close()
+                    # s.shutdown(socket.SHUT_RDWR)
+                    # s._sock.close()
+                    # s.close()
                     debug_comm('[%s] Received %s' % (self.name, repr(data)))
                 return data
             except socket.error, (errno, strerror):
-                if errno in [32, 104, 111, 10057 , 10061]:
-                    debug_comm("[%s] Connection reset by peer, recreating" % self.name)
+                if errno in [32, 104, 111, 10057, 10061]:
+                    debug_comm("[%s] Connection reset by peer, recreating" %
+                               self.name)
                     # Handle double faults
-                    if remote in [ r for r,_ in self.current_links ]:
-                        self.current_links.remove( (remote, s) )
+                    if remote in [r for r, _ in self.current_links]:
+                        self.current_links.remove((remote, s))
                     # FIXME
                     time.sleep(1)
                     # Needed to reset counters on node lost/creation
-                    #self.wsocket_counter[uniqid] = 0
+                    # self.wsocket_counter[uniqid] = 0
                 elif errno in [113]:
-                    self.sendRemotef(self.master, "alert|%s>down#%s" % (self.name, repr(remote)))
-                    return 'None' 
+                    self.sendRemotef(self.master, "alert|%s>down#%s" %
+                                     (self.name, repr(remote)))
+                    return 'None'
                 else:
-                    debug_comm("[-] [%s] Error %s [%s][%s]" % (self.name, msg, errno, strerror))
+                    debug_comm("[-] [%s] Error %s [%s][%s]" %
+                               (self.name, msg, errno, strerror))
                     raise
                     return []
 
@@ -258,53 +271,60 @@ class PThread(Thread):
         cmsg, hmsg = self.__encrypt(msg, iv)
         debug_crypto("[%s] b64ing msg" % self.name)
         cmsg = base64.b64encode(cmsg)
-        debug_crypto("[%s] Encrypt msg :: %s :: %s :: %s" % (self.name, remote, iv, cmsg))
+        debug_crypto("[%s] Encrypt msg :: %s :: %s :: %s" %
+                     (self.name, remote, iv, cmsg))
         hmsg = base64.b64encode(hmsg)
-        jsonmsg = {"cmsg":cmsg, "checksum":hmsg}
+        jsonmsg = {"cmsg": cmsg, "checksum": hmsg}
         debug_comm("[%s] Sending msg" % self.name)
-        s.send( "%s%s" % (json.dumps(jsonmsg), EOT_FLAG) ) # json.dumps puis json/loads
+        s.send("%s%s" % (json.dumps(jsonmsg), EOT_FLAG))
 
     def worker(self, conn):
         """
         Handle socket reception job.
         """
         data_recv = ""
-        uniqid = random.randint(0,200000)
+        uniqid = random.randint(0, 200000)
         self.wsocket_counter[uniqid] = 0
         while not self.quitting:
-            debug_comm("[%sW%s] Worker waiting datas (prev:%s)" % (self.name, uniqid, data_recv))
+            debug_comm("[%sW%s] Worker waiting datas (prev:%s)" %
+                       (self.name, uniqid, data_recv))
             data_prev = ""
-            while not EOT_FLAG in data_recv:
+            while EOT_FLAG not in data_recv:
                 data_recv += conn.recv(RECV_LENGTH)
-                debug_comm_detail('[%sW%s] Daemon Received %s' % (self.name, uniqid, repr(data_recv)))
+                debug_comm_detail('[%sW%s] Daemon Received %s' %
+                                  (self.name, uniqid, repr(data_recv)))
                 # FIXME Weird behaviour when killing other side, loop with ''
                 if data_recv == data_prev:
                     conn.close()
-                    #self.quitting = True
+                    # self.quitting = True
                     return
                 data_prev = data_recv
             # Fail if multiple messages into "data"
             # data = data.replace(EOT_FLAG, "")
             for data in data_recv.split(EOT_FLAG)[0:-1]:
-                debug_comm_len('[%sW%s] Parsing data %s' % (self.name, uniqid, repr(data)))
+                debug_comm_len('[%sW%s] Parsing data %s' %
+                               (self.name, uniqid, repr(data)))
                 # Checking integrity
                 jsonmsg = json.loads(data)
-                #    debug_comm('[%sW%s] Integrity error for json message, skipping data ' % (self.name, uniqid))
+                #    debug_comm('[%sW%s] Integrity error for json message,
+                #               skipping data ' % (self.name, uniqid))
                 #    continue
                 # Parse message
                 iv = "%016i" % self.wsocket_counter[uniqid]
                 cmsg = base64.b64decode(jsonmsg['cmsg'])
                 hmsg = base64.b64decode(jsonmsg['checksum'])
                 data = self.__decrypt(cmsg, iv, hmsg)
-                debug_crypto("[%sW%s] Counter :: %s" % (self.name, uniqid, self.wsocket_counter[uniqid]))
+                debug_crypto("[%sW%s] Counter :: %s" %
+                             (self.name, uniqid, self.wsocket_counter[uniqid]))
                 debug_crypto("[%sW%s] Data:: %s" % (self.name, uniqid, data))
-                self.wsocket_counter[uniqid]+= 1
+                self.wsocket_counter[uniqid] += 1
                 # The counter can be desynchronized
                 try:
                     command = self.__get_method(data)
                     arguments = self.__get_arguments(data)
                 except:
-                    sys.stderr.write("[%sW%s] Error with %s" % (self.name, uniqid, data))
+                    sys.stderr.write("[%sW%s] Error with %s" %
+                                     (self.name, uniqid, data))
                     conn.close()
                     return
                 result = ""
@@ -313,28 +333,31 @@ class PThread(Thread):
                     # conn.send("ack|" + EOT_FLAG)
                     # alert message is forwarded to the whole chain
                     if self.master:
-                        self.sendRemote(self.master, "alert|" + self.name + '>' + arguments, needack = False)
+                        self.sendRemotef(self.master, 'alert|%s>%s' %
+                                         (self.name, arguments))
                     # registered alert handlers are called
                     for handler in self.alert_handlers:
                         handler(data)
                 elif command == "ack":
                     pass
                 else:
-                    debug_comm("[-] %sW%s> Data not parsed, forwarding" % (self.name, uniqid))
+                    debug_comm("[-] %sW%s> Data not parsed, forwarding" %
+                               (self.name, uniqid))
                     result = self.send(data)
                     if result != "":
                         conn.send(str(result) + EOT_FLAG)
                     else:
                         conn.send("ack|" + EOT_FLAG)
                 debug_comm("[%sW%s] Done" % (self.name, uniqid))
-                #conn.shutdown(socket.SHUT_RDWR)
-                #conn._sock.close()
-                #conn.close()
+                # conn.shutdown(socket.SHUT_RDWR)
+                # conn._sock.close()
+                # conn.close()
                 if command == "destroy":
                     conn.close()
                     self.quitting = True
-                    debug_thread("[%sW%s] Connection closed, destroying" % (self.name, uniqid))
-                    return # just to be sure :)
+                    debug_thread("[%sW%s] Connection closed, destroying" %
+                                 (self.name, uniqid))
+                    return  # just to be sure :)
             # Last message is splitted
             data_recv = data_recv.split(EOT_FLAG)[-1]
 
@@ -346,11 +369,12 @@ class PThread(Thread):
         It SHOULD NOT accept multiple hosts, but ready for it.
         """
         debug_thread("[%s] Creating interface listeners" % self.name)
-        #for host in self.host:
-        t = ThreadWorker(target = self.listen_interface, args = (self.host,))
+        # for host in self.host:
+        t = ThreadWorker(target=self.listen_interface, args=(self.host,))
         self.interface_threads.append(t)
         t.start()
-        debug_thread("[%s] Interface listener quitting, waiting workers" % self.name)
+        debug_thread("[%s] Interface listener quitting, waiting workers" %
+                     self.name)
         for t in self.interface_threads:
             t.join()
         debug_thread("[%s] Interface workers joined" % self.name)
@@ -358,28 +382,32 @@ class PThread(Thread):
     def listen_interface(self, host):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        # WARNING : Works only if hostname is not mapped to 127.0.0.1 in /etc/hosts
+        # WARNING !!
+        # Works only if hostname is not mapped to 127.0.0.1 in /etc/hosts
+        # WARNING !!
         # self.host = socket.gethostbyname(socket.gethostname())
-        debug_comm("[%s] Binding on %s:%s" % (self.name, repr(host), self.port))
-        s.bind( (host, self.port) )
+        debug_comm("[%s] Binding on %s:%s" %
+                   (self.name, repr(host), self.port))
+        s.bind((host, self.port))
         # self.port = s.getsockname()[1]
         s.listen(1000)
         debug_comm("[%s] Listening on %s:%s" % (self.name, host, self.port))
         while not self.quitting:
-            rr,rw,err = select.select([s],[],[], 1)
+            rr, rw, err = select.select([s], [], [], 1)
             debug_thread("[%s] Selected" % self.name)
             if rr:
                 conn, addr = s.accept()
                 debug_comm("[%s] Accepted connection" % self.name)
-                t = ThreadWorker(target = self.worker, args = (conn,))
+                t = ThreadWorker(target=self.worker, args=(conn,))
                 self.threads.append(t)
                 t.start()
-        debug_thread("[%s] Quitting, waiting for workers: %s" % (self.name, self.threads))
+        debug_thread("[%s] Quitting, waiting for workers: %s" %
+                     (self.name, self.threads))
         for t in self.threads:
             t.join()
         debug_thread("[%s] Workers joined" % self.name)
 
-    def wait_backend(self, max_tries = 0):
+    def wait_backend(self, max_tries=0):
         """
         Ping node backend and return when backend is up.
 
@@ -389,14 +417,14 @@ class PThread(Thread):
         while max_tries == 0 or tries < max_tries:
             name, ip, port = self.backend
             ret = subprocess.call("ping -c 1 %s" % ip,
-                            shell=True,
-                            stdout=open('/dev/null', 'w'),
-                            stderr=subprocess.STDOUT)
+                                  shell=True,
+                                  stdout=open('/dev/null', 'w'),
+                                  stderr=subprocess.STDOUT)
             if ret == 0:
                 return 'Ok'
             else:
                 time.sleep(1)
-                tries+= 1
+                tries += 1
         return None
 
     def __get_method(self, msg):
@@ -409,30 +437,32 @@ class PThread(Thread):
         return self.__get_arguments(msg).split('#')
 
     def __encrypt(self, msg, iv):
-        #iv = Random.new().read(AES.block_size)
+        # iv = Random.new().read(AES.block_size)
         cipher = AES.new(self.key, AES.MODE_CFB, iv)
-        #return iv, cipher.encrypt(msg)
+        # return iv, cipher.encrypt(msg)
         ciph = cipher.encrypt(msg)
         hmsg = self.__checksum(ciph)
         return ciph, hmsg
-        #gcm = AES_GCM(self.key)
-        #return gcm.encrypt(iv, msg)
+        # gcm = AES_GCM(self.key)
+        # return gcm.encrypt(iv, msg)
 
     def __decrypt(self, msg, iv, auth):
         if auth != self.__checksum(msg):
-            debug_comm('[%sW] Integrity error for json message, skipping data ' % self.name)
+            debug_comm('[%sW] Integrity error for json message,'
+                       'skipping data ' % self.name)
             debug_comm('%s :: %s' % (auth, self.__checksum(msg)))
             return
         cipher = AES.new(self.key, AES.MODE_CFB, iv)
         return cipher.decrypt(msg)
-        #gcm = AES_GCM(self.key)
-        #return gcm.decrypt(iv, msg, auth)
+        # gcm = AES_GCM(self.key)
+        # return gcm.decrypt(iv, msg, auth)
 
     def __checksum(self, msg):
         return hashlib.sha1(msg).hexdigest()
 
     def launch(self):
         pass
+
 
 class Node(PThread):
     # Overrides threading.Thread.run()
@@ -442,6 +472,7 @@ class Node(PThread):
             return profiler.runcall(PThread.run, self)
         finally:
             profiler.dump_stats('myprofile-%s.profile' % (self.name))
+
 
 class ThreadWorker(Thread):
     # Overrides threading.Thread.run()
