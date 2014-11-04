@@ -1,4 +1,4 @@
-# Tutorial
+# Tutorial [![Build Status](https://travis-ci.org/Orange-OpenSource/vespa-core.svg?branch=tutorial)](https://travis-ci.org/Orange-OpenSource/vespa-core)
 
 ## Setup
 
