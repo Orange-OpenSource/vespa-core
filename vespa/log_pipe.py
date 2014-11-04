@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: log_pipe.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -23,6 +23,8 @@
 """
 log_pipe
 """
+
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -39,34 +41,42 @@ class bcolors:
         self.FAIL = ''
         self.ENDC = ''
 
+
 def debug1(str):
     print repr(str)
     pass
+
 
 def debug2(str):
     print repr(str)
     pass
 
+
 def debug4(str):
     print repr(str)
-    #raise Exception("Fatal!")
+    # raise Exception("Fatal!")
     raise
+
 
 def debug5(str):
     print "%s[INFO]%s %s" % (bcolors.HEADER, bcolors.ENDC, str)
     pass
 
+
 def debug_info(str):
     debug5(str)
     pass
 
+
 def debug_comm(str):
-#    print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
+    # print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
     pass
 
+
 def debug_crypto(str):
-#    print "%s[CRYP]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
+    # print "%s[CRYP]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
     pass
+
 
 def debug_comm_len(s):
     """
@@ -74,9 +84,10 @@ def debug_comm_len(s):
 
     Notes: offloaded to prevent screen flooding
     """
-#    print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, s[0:200])
-    #print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, s)
+    # print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, s[0:200])
+    # print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, s)
     pass
+
 
 def debug_comm_detail(str):
     """
@@ -85,17 +96,20 @@ def debug_comm_detail(str):
 
     Notes: offloaded to prevent screen flooding
     """
-#    print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
+    # print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
     pass
+
 
 def debug_thread(str):
-#    print "%s[THRD]%s %s" % (bcolors.FAIL, bcolors.ENDC, str)
+    # print "%s[THRD]%s %s" % (bcolors.FAIL, bcolors.ENDC, str)
     pass
+
 
 def debug_init(str):
-#    print "%s[INIT]%s %s" % (bcolors.OKGREEN, bcolors.ENDC, str)
+    # print "%s[INIT]%s %s" % (bcolors.OKGREEN, bcolors.ENDC, str)
     pass
 
+
 def debug_controller(str):
-#    print "%s[CNTR]%s %s" % (bcolors.OKGREEN, bcolors.ENDC, str)
+    # print "%s[CNTR]%s %s" % (bcolors.OKGREEN, bcolors.ENDC, str)
     pass

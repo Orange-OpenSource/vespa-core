@@ -213,7 +213,7 @@ if __name__ == '__main__':
 
     try:
         decrypted = my_gcm.decrypt(init_value, encrypted,
-                new_tag + 1, auth_data)
+                                   new_tag + 1, auth_data)
     except InvalidTagException:
         decrypted = my_gcm.decrypt(init_value, encrypted, new_tag, auth_data)
         print 'decrypted:', hex(bytes_to_long(decrypted))

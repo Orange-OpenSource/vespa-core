@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: model.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -23,12 +23,6 @@
 """
 Model
 """
-#from vorchestrator import VO
-#from horchestrator import HO
-#from agent import Agent
-#from agent_bandwidth import Agent_Bandwidth
-#from horchestrator_vm import HO_VM
-#from horchestrator_hy import HO_HY
 from log_pipe import *
 import socket
 from node import Node
@@ -50,14 +44,14 @@ class Model(Node):
 
         # Config file modifications
         for obj in config:
-            if not 'Type' in obj:
+            if 'Type' not in obj:
                 config[obj]['Type'] = obj
 
         # Looking for VO (mandatory)
         vo_object = self.find_vo(config)
         debug_init("Found VO")
 
-        if vo_object == None:
+        if vo_object is None:
             debug5("%s: Unable to find VO, exiting" % self.name)
             raise Exception("Model %s need a VO" % self.name)
 
@@ -84,18 +78,23 @@ class Model(Node):
         debug_init("Creating object: %s" % obj['Type'])
         obj_location = config[obj['Location']]['Interfaces']
 
-        #is_local = obj_location == config[config['VO']['Location']]['Interfaces']
+        # is_local =
+        #    obj_location == config[config['VO']['Location']]['Interfaces']
         is_local = obj['Location'] == socket.gethostname()
 
-        debug_init("Object is local: [%s == %s] %s" % (obj['Location'], socket.gethostname(), is_local) )
+        debug_init("Object is local: [%s == %s] %s" %
+                   (obj['Location'], socket.gethostname(), is_local))
 
         try:
-            obj_instance = eval(obj['Type'])(obj['Type'], obj_location, int(obj['Port']), master.desc(), is_local)
+            obj_instance = eval(obj['Type'])(obj['Type'],
+                                             obj_location, int(obj['Port']),
+                                             master.desc(), is_local)
         except NameError:
-            debug5("Did you forget to add the agent into model.py ? Anyway, trying auto import!")
-            a = __import__(obj['Type'].lower(), fromlist = [ obj['Type'] ])
+            debug5("Agent into model.py ? Anyway, trying auto import!")
+            a = __import__(obj['Type'].lower(), fromlist=[obj['Type']])
             b = getattr(a, obj['Type'])
-            obj_instance = b(obj['Type'], obj_location, int(obj['Port']), master.desc(), is_local)
+            obj_instance = b(obj['Type'], obj_location, int(obj['Port']),
+                             master.desc(), is_local)
 
         debug_init("Registering object")
         """
@@ -103,23 +102,27 @@ class Model(Node):
             self.register(obj['Type'], obj_location, obj['Port'])
         else:
             """
-        if is_local: self.sendRemoteWake(master.desc(), "register|%s" % obj_instance)
+        if is_local:
+            self.sendRemoteWake(master.desc(), "register|%s" % obj_instance)
 
         debug_init("Adding slaves")
         # Adding slaves to object
         for slave in config:
             debug_init("-> %s [%s]" % (config[slave], obj['Type']))
-            if 'Master' in config[slave]: debug_init("   %s" % config[slave]['Master'])
-            if 'Master' in config[slave] and config[slave]['Master'] == obj['Type']:
-                self.create_object_instance(config, config[slave], obj_instance)
+            if 'Master' in config[slave]:
+                debug_init("   %s" % config[slave]['Master'])
+            if ('Master' in config[slave]
+                    and config[slave]['Master'] == obj['Type']):
+                self.create_object_instance(config, config[slave],
+                                            obj_instance)
 
     def sendRemoteWake(self, remote, msg):
         """
         Force sending content to a remote host. Loop until it is done
         """
         while True:
-            #self.sendRemote(remote, msg)
-            #return
+            # self.sendRemote(remote, msg)
+            # return
             try:
                 debug_comm("Waiting for %s" % repr(remote))
                 self.sendRemote(remote, msg)
@@ -130,7 +133,8 @@ class Model(Node):
 
     def findNode(self, name):
         """
-        Return a tuple if the node "name" is found, raise an Exception otherwise.
+        Return a tuple if the node "name" is found, raise an Exception
+        otherwise.
         TODO: Refactor (3x)
         """
         for vo in self.slaves:
