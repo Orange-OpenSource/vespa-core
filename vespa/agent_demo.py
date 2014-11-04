@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: agent_demo.py
 # Version:     1.0
 # Created:     03/11/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -28,18 +28,19 @@ from node import Node
 from agent import Agent
 import time
 
+
 class Agent_Demo(Agent):
     def __init__(self, name, host, port, master, run=True):
         super(Agent_Demo, self,).__init__(name, host, port, master, run)
 
     def follow(self, thefile):
-	thefile.seek(0,2)      # Go to the end of the file
-	while not self.quitting:
-	     line = thefile.readline()
-	     if not line:
-		 time.sleep(0.1)    # Sleep briefly
-		 continue
-	     yield line
+        thefile.seek(0, 2)      # Go to the end of the file
+        while not self.quitting:
+            line = thefile.readline()
+            if not line:
+                time.sleep(0.1)    # Sleep briefly
+                continue
+            yield line
 
     def launch(self):
         logfile = open("/home/dad/file")

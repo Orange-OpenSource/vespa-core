@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: ho.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -28,6 +28,7 @@ from log_pipe import *
 from threading import Thread
 from node import *
 
+
 class HO(Node):
     def __init__(self, name, host, port, master, run=True):
         super(HO, self,).__init__(name, host, port, master, run)
@@ -37,4 +38,3 @@ class HO(Node):
             if agent_name == name:
                 return (agent_name, host, port)
         raise Exception("Agent %s not present in HO %s." % (name, self.name))
-

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: vo.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -28,6 +28,7 @@ from node import *
 import sys
 import time
 
+
 class VO(Node):
     def __init__(self, name, host, port, master, run=True):
         super(VO, self,).__init__(name, host, port, None, run)
@@ -36,22 +37,25 @@ class VO(Node):
 
     def alert(self, msg):
         debug_comm_len("[%s] Received alert : %s" % (self.name, msg))
-        #print "repr:" + repr(msg)
+        # print "repr:" + repr(msg)
         source = msg.split("|")[1].split(">")[-2]
         message = msg.split(">")[-1]
         #
         # New node registered
         #
         if "archi=" in message:
-            self.sendRemotef(self.model, "alert|%s>%s" % (self.name, msg.split("|")[1]))
+            self.sendRemotef(self.model, "alert|%s>%s" %
+                             (self.name, msg.split("|")[1]))
 
         if source == "Agent_Demo":
             if "new_line" in message:
                 args = message.split('#')
                 line = args[1]
 
-		#agent_demo = self.findNode("Agent_Demo")
-		#self.sendRemotef(agent_controller, "alert_ip|%s#%s" % (ipobj['value'], mac))
-		debug_info("Alert received: %s" % line)
+                # agent_demo = self.findNode("Agent_Demo")
+                # self.sendRemotef(agent_controller, "alert_ip|%s#%s" %
+                #                  (ipobj['value'], mac))
+                debug_info("Alert received: %s" % line)
             else:
-                self.sendRemotef(self.model, "alert|%s>Unexpected alert: %s" % (self.name, message))
+                self.sendRemotef(self.model, "alert|%s>Unexpected alert: %s" %
+                                 (self.name, message))

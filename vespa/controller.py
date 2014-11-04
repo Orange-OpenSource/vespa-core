@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: controller.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -32,10 +32,11 @@ from SocketServer import ThreadingMixIn
 import threading
 import urlparse
 
+
 class HttpServerHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        #content_length = int(self.headers.getheader("Content-Length"))
-        #request = self.rfile.read(content_length)
+        # content_length = int(self.headers.getheader("Content-Length"))
+        # request = self.rfile.read(content_length)
         # BaseHTTPRequestHandler has a property called server and because
         # we create MyHTTPServer, it has a handler property
         request = urlparse.urlparse(self.path)
@@ -49,15 +50,17 @@ class HttpServerHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format, *args):
         return
-     
+
+
 class MyHTTPServer(HTTPServer):
     """this class is necessary to allow passing custom request handler into
        the RequestHandlerClass"""
-    def __init__(self, server_address, RequestHandlerClass, handler, controller):
+    def __init__(self, server_address, RequestHandlerClass, handler, control):
         HTTPServer.__init__(self, server_address, RequestHandlerClass)
         self.handler = handler
-        self.controller = controller
-             
+        self.controller = control
+
+
 class HttpServer:
     def __init__(self, name, host, port, handler, c):
         self.name = name
@@ -66,27 +69,29 @@ class HttpServer:
         self.handler = handler
         self.server = None
         self.controller = c
-         
+
     def start(self):
         # we need use MyHttpServer here
         self.server = MyHTTPServer((self.host, self.port), HttpServerHandler,
                                    self.handler, self.controller)
         self.server.serve_forever()
-     
+
     def stop(self):
         if self.server:
             self.server.shutdown()
- 
+
+
 def server_handler(c, request):
     if request == "/archi":
         vo = c.model.slaves[0]
         vo_name, vo_host, vo_port = vo
-        a = {'name':vo_name, 'host':vo_host, 'port':vo_port, 'children':[]}
+        a = {'name': vo_name, 'host': vo_host, 'port': vo_port, 'children': []}
         vo_slaves_raw = c.model.sendRemote(vo, "list_slaves|")
         vo_slaves = eval(vo_slaves_raw)
         for ho in vo_slaves:
             ho_name, ho_host, ho_port = ho
-            b = {'name':ho_name, 'host':ho_host, 'port':ho_port, 'children':[]}
+            b = {'name': ho_name, 'host': ho_host, 'port': ho_port,
+                 'children': []}
             a['children'].append(b)
             ho_slaves_raw = c.model.sendRemote(ho, "list_slaves|")
             try:
@@ -94,7 +99,8 @@ def server_handler(c, request):
             except SyntaxError:
                 ho_slaves = []
             for agent_name, agent_host, agent_port in ho_slaves:
-                d = {'name':agent_name, 'host':agent_host, 'port':agent_port, 'children':[]}
+                d = {'name': agent_name, 'host': agent_host,
+                     'port': agent_port, 'children': []}
                 b['children'].append(d)
         return a
     elif request == "/trans_bytes":
@@ -128,6 +134,7 @@ def server_handler(c, request):
     else:
         return request
 
+
 class Controller():
     def __init__(self, model, view):
         self.model = model
@@ -143,5 +150,6 @@ class Controller():
         debug5("Started Controller")
 
         signal.signal(signal.SIGINT, self.handler)
-        server = HttpServer("test server", "0.0.0.0", 8080, server_handler, self)
+        server = HttpServer("test server", "0.0.0.0", 8080, server_handler,
+                            self)
         server.start()
