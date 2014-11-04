@@ -137,6 +137,8 @@ class Controller():
         if signum == 2:
             debug_init("Controller received shutting down")
             self.model.destroy()
+            exit(0)
+
     def start(self):
         debug5("Started Controller")
 
