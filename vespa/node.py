@@ -2,7 +2,7 @@
 #
 # Module name: node.py
 # Version:     1.0
-# Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
+# Created:     29/04/2014 by AurÃ©lien Wailly <aurelien.wailly@orange.com>
 #
 # Copyright (C) 2010-2014 Orange
 #
@@ -40,8 +40,8 @@ from threading import Thread
 import cProfile
 import select
 import subprocess
-import time
 import hashlib
+import time
 import json
 from Crypto.Cipher import AES
 from Crypto import Random
@@ -163,8 +163,8 @@ class PThread(Thread):
             # if msg == method:
             #    debug1("BOUNGA")
             #    return self.__getattribute__(method)()
-            if self.__get_method(msg) == method:
-                arguments = self.__get_arguments_list(msg)
+            if self._get_method(msg) == method:
+                arguments = self._get_arguments_list(msg)
                 if len(arguments) == 1 and len(arguments[0]) == 0:
                     return self.__getattribute__(method)()
                 else:
@@ -268,7 +268,7 @@ class PThread(Thread):
         Handle the socket (s.send) message and encryption routines.
         """
         iv = "%016i" % self.socket_counter[remote]
-        cmsg, hmsg = self.__encrypt(msg, iv)
+        cmsg, hmsg = self._encrypt(msg, iv)
         debug_crypto("[%s] b64ing msg" % self.name)
         cmsg = base64.b64encode(cmsg)
         debug_crypto("[%s] Encrypt msg :: %s :: %s :: %s" %
@@ -313,15 +313,15 @@ class PThread(Thread):
                 iv = "%016i" % self.wsocket_counter[uniqid]
                 cmsg = base64.b64decode(jsonmsg['cmsg'])
                 hmsg = base64.b64decode(jsonmsg['checksum'])
-                data = self.__decrypt(cmsg, iv, hmsg)
+                data = self._decrypt(cmsg, iv, hmsg)
                 debug_crypto("[%sW%s] Counter :: %s" %
                              (self.name, uniqid, self.wsocket_counter[uniqid]))
                 debug_crypto("[%sW%s] Data:: %s" % (self.name, uniqid, data))
                 self.wsocket_counter[uniqid] += 1
                 # The counter can be desynchronized
                 try:
-                    command = self.__get_method(data)
-                    arguments = self.__get_arguments(data)
+                    command = self._get_method(data)
+                    arguments = self._get_arguments(data)
                 except:
                     sys.stderr.write("[%sW%s] Error with %s" %
                                      (self.name, uniqid, data))
@@ -427,37 +427,37 @@ class PThread(Thread):
                 tries += 1
         return None
 
-    def __get_method(self, msg):
+    def _get_method(self, msg):
         return msg.split("|")[0]
 
-    def __get_arguments(self, msg):
+    def _get_arguments(self, msg):
         return msg.split("|")[1]
 
-    def __get_arguments_list(self, msg):
-        return self.__get_arguments(msg).split('#')
+    def _get_arguments_list(self, msg):
+        return self._get_arguments(msg).split('#')
 
-    def __encrypt(self, msg, iv):
+    def _encrypt(self, msg, iv):
         # iv = Random.new().read(AES.block_size)
         cipher = AES.new(self.key, AES.MODE_CFB, iv)
         # return iv, cipher.encrypt(msg)
         ciph = cipher.encrypt(msg)
-        hmsg = self.__checksum(ciph)
+        hmsg = self._checksum(ciph)
         return ciph, hmsg
         # gcm = AES_GCM(self.key)
         # return gcm.encrypt(iv, msg)
 
-    def __decrypt(self, msg, iv, auth):
-        if auth != self.__checksum(msg):
+    def _decrypt(self, msg, iv, auth):
+        if auth != self._checksum(msg):
             debug_comm('[%sW] Integrity error for json message,'
                        'skipping data ' % self.name)
-            debug_comm('%s :: %s' % (auth, self.__checksum(msg)))
+            debug_comm('%s :: %s' % (auth, self._checksum(msg)))
             return
         cipher = AES.new(self.key, AES.MODE_CFB, iv)
         return cipher.decrypt(msg)
         # gcm = AES_GCM(self.key)
         # return gcm.decrypt(iv, msg, auth)
 
-    def __checksum(self, msg):
+    def _checksum(self, msg):
         return hashlib.sha1(msg).hexdigest()
 
     def launch(self):
