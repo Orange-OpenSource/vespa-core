@@ -11,9 +11,9 @@ from vespa.node import Node
 
 
 class TestInit(unittest.TestCase):
-    def test_instance_node(self):
+    def test_instance_vo(self):
         v = VO('testnode', "127.0.0.1", 1337, None, run=False)
-        self.assert(isinstance(v, Node))
+        self.assertTrue(isinstance(v, Node))
 
     def test_alert_handler(self):
         v = VO('testnode', "127.0.0.1", 1337, None, run=False)
