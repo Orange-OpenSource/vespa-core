@@ -4,9 +4,10 @@ import os
 
 DOSSIER_COURRANT = os.path.dirname(os.path.abspath(__file__))
 DOSSIER_PARENT = os.path.dirname(DOSSIER_COURRANT)
+DOSSIER_PARENT = os.path.dirname(DOSSIER_PARENT)
 sys.path.append(DOSSIER_PARENT)
 
-from node import Node
+from vespa.node import Node
 
 
 class TestCrypto(unittest.TestCase):
@@ -38,6 +39,14 @@ class TestCrypto(unittest.TestCase):
         m_d = c[0]
         d = n._decrypt(m_d, iv, n._checksum(m_d))
         self.assertEqual(d, m)
+
+    def test_register_handler(self):
+        def test_handler():
+            return "OK"
+
+        n = Node('testnode', "127.0.0.1", 1337, None, run=False)
+        n.register_alert_handler(test_handler)
+        self.assertIn(test_handler, n.alert_handlers)
 
 if __name__ == '__main__':
     unittest.main()
