@@ -1,4 +1,4 @@
-import unittest 
+import unittest
 import sys
 import os
 
@@ -15,7 +15,8 @@ class TestCrypto(unittest.TestCase):
         iv = "%16i" % 0
         m = "hello"
         c = n._encrypt(m, iv)
-        self.assertEqual(c, ('Y\xc8\x83V\xe4', '2dc4d9ee2b2f519dae0d9e55e1a3e512f30f2738'))
+        self.assertEqual(c, ('Y\xc8\x83V\xe4',
+                             '2dc4d9ee2b2f519dae0d9e55e1a3e512f30f2738'))
 
     def test_decrypt(self):
         n = Node('testnode', "127.0.0.1", 1337, None, run=False)
@@ -37,6 +38,6 @@ class TestCrypto(unittest.TestCase):
         m_d = c[0]
         d = n._decrypt(m_d, iv, n._checksum(m_d))
         self.assertEqual(d, m)
- 
+
 if __name__ == '__main__':
     unittest.main()
