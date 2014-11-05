@@ -2,3 +2,5 @@
 *.swp
 *~
 *.profile
+.coverage
+vespa/config.ini
