@@ -8,7 +8,10 @@ branches:
 install:
   - pip install -r requirements.txt --use-mirrors
   - pip install pep8
+  - pip install coverage
+  - pip install coveralls
 script:
   - pep8 --exclude=migrations vespa
   - py.test
+  - coverage run
 #  - py.test --cov=vespa --cov-report=term
