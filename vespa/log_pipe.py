@@ -69,12 +69,12 @@ def debug_info(str):
 
 
 def debug_comm(str):
-    # print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
+    print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
     pass
 
 
 def debug_crypto(str):
-    # print "%s[CRYP]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
+    print "%s[CRYP]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
     pass
 
 
@@ -84,7 +84,7 @@ def debug_comm_len(s):
 
     Notes: offloaded to prevent screen flooding
     """
-    # print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, s[0:200])
+    print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, s[0:200])
     # print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, s)
     pass
 
@@ -96,20 +96,20 @@ def debug_comm_detail(str):
 
     Notes: offloaded to prevent screen flooding
     """
-    # print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
+    print "%s[COMM]%s %s" % (bcolors.OKBLUE, bcolors.ENDC, str)
     pass
 
 
 def debug_thread(str):
-    # print "%s[THRD]%s %s" % (bcolors.FAIL, bcolors.ENDC, str)
+    print "%s[THRD]%s %s" % (bcolors.FAIL, bcolors.ENDC, str)
     pass
 
 
 def debug_init(str):
-    # print "%s[INIT]%s %s" % (bcolors.OKGREEN, bcolors.ENDC, str)
+    print "%s[INIT]%s %s" % (bcolors.OKGREEN, bcolors.ENDC, str)
     pass
 
 
 def debug_controller(str):
-    # print "%s[CNTR]%s %s" % (bcolors.OKGREEN, bcolors.ENDC, str)
+    print "%s[CNTR]%s %s" % (bcolors.OKGREEN, bcolors.ENDC, str)
     pass
