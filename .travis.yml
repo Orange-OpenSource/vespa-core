@@ -6,9 +6,9 @@ branches:
   only:
     - tutorial
 install:
-#  - pip install -r requirements.txt --use-mirrors
+  - pip install -r requirements.txt --use-mirrors
   - pip install pep8
 script:
   - pep8 --exclude=migrations vespa
   - py.test
-  - py.test2 --cov=vespa --cov-report=term
+  - py.test --cov=vespa --cov-report=term
