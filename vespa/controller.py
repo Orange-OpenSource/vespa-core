@@ -2,7 +2,7 @@
 #
 # Module name: controller.py
 # Version:     1.0
-# Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
+# Created:     29/04/2014 by AurÃ©lien Wailly <aurelien.wailly@orange.com>
 #
 # Copyright (C) 2010-2014 Orange
 #
@@ -135,7 +135,7 @@ def server_handler(c, request):
         return request
 
 
-class Controller():
+class Controller(object):
     def __init__(self, model, view):
         self.model = model
         self.view = view
