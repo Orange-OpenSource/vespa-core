@@ -13,11 +13,11 @@ from vespa.node import Node
 class TestInit(unittest.TestCase):
     def test_instance_node(self):
         v = VO('testnode', "127.0.0.1", 1337, None, run=False)
-        self.assertIsInstance(v, Node)
+        self.assert(isinstance(v, Node))
 
     def test_alert_handler(self):
         v = VO('testnode', "127.0.0.1", 1337, None, run=False)
-        self.assertIn(v.alert, v.alert_handlers)
+        self.assertTrue(v.alert in v.alert_handlers)
 
 if __name__ == '__main__':
     unittest.main()

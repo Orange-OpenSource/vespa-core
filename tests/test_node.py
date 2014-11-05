@@ -45,7 +45,7 @@ class TestCrypto(unittest.TestCase):
 
         n = Node('testnode', "127.0.0.1", 1337, None, run=False)
         n.register_alert_handler(test_handler)
-        self.assertIn(test_handler, n.alert_handlers)
+        self.assertTrue(test_handler in n.alert_handlers)
 
 if __name__ == '__main__':
     unittest.main()

@@ -13,7 +13,7 @@ from vespa.ho import HO
 class TestInit(unittest.TestCase):
     def test_instance_node(self):
         v = HO('testnode', "127.0.0.1", 1337, None, run=False)
-        self.assertIsInstance(v, Node)
+        self.assertTrue(isinstance(v, Node))
 
 if __name__ == '__main__':
     unittest.main()
