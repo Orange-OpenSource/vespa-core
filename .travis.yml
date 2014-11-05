@@ -11,4 +11,4 @@ install:
 script:
   - pep8 --exclude=migrations vespa
   - py.test
-  - py.test --cov=vespa --cov-report=term
+#  - py.test --cov=vespa --cov-report=term
