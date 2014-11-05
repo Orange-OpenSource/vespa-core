@@ -2,7 +2,7 @@
 #
 # Module name: agent_demo.py
 # Version:     1.0
-# Created:     03/11/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
+# Created:     03/11/2014 by AurÃ©lien Wailly <aurelien.wailly@orange.com>
 #
 # Copyright (C) 2010-2014 Orange
 #
