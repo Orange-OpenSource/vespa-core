@@ -135,7 +135,7 @@ def server_handler(c, request):
         return request
 
 
-class Controller():
+class Controller(object):
     def __init__(self, model, view):
         self.model = model
         self.view = view

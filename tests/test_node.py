@@ -4,7 +4,6 @@ import os
 
 DOSSIER_COURRANT = os.path.dirname(os.path.abspath(__file__))
 DOSSIER_PARENT = os.path.dirname(DOSSIER_COURRANT)
-DOSSIER_PARENT = os.path.dirname(DOSSIER_PARENT)
 sys.path.append(DOSSIER_PARENT)
 
 from vespa.node import Node
