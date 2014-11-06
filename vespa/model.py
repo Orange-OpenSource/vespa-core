@@ -48,12 +48,12 @@ class Model(Node):
                 config[obj]['Type'] = obj
 
         # Looking for VO (mandatory)
-        vo_object = self.find_vo(config)
-        debug_init("Found VO")
-
-        if vo_object is None:
+        try:
+            vo_object = self.find_vo(config)
+            debug_init("Found VO")
+        except KeyError:
             debug5("%s: Unable to find VO, exiting" % self.name)
-            raise Exception("Model %s need a VO" % self.name)
+            raise  # Exception("Model %s need a VO" % self.name)
 
         # Instanciating object
         self.create_object_instance(config, vo_object, self)
@@ -71,6 +71,7 @@ class Model(Node):
             if config[obj]['Type'] == 'VO':
                 debug_init("%s: Found VO" % self.name)
                 vo_object = obj
+                break
 
         return config[vo_object]
 

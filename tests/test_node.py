@@ -25,6 +25,13 @@ class TestCrypto(unittest.TestCase):
         c = n._decrypt(m, iv, n._checksum(m))
         self.assertEqual(c, 'Y\xf4\x14>\x1d')
 
+    def test_decrypt_bad_checksum(self):
+        n = Node('testnode', "127.0.0.1", 1337, None, run=False)
+        iv = "%16i" % 0
+        m = "hello"
+        with self.assertRaises(Exception):
+            c = n._decrypt(m, iv, n._checksum("bad_hello"))
+
     def test_checksum(self):
         n = Node('testnode', "127.0.0.1", 1337, None, run=False)
         c = n._checksum("hello")
@@ -39,6 +46,7 @@ class TestCrypto(unittest.TestCase):
         d = n._decrypt(m_d, iv, n._checksum(m_d))
         self.assertEqual(d, m)
 
+class TestAccessors(unittest.TestCase):
     def test_register_handler(self):
         def test_handler():
             return "OK"
@@ -46,6 +54,12 @@ class TestCrypto(unittest.TestCase):
         n = Node('testnode', "127.0.0.1", 1337, None, run=False)
         n.register_alert_handler(test_handler)
         self.assertTrue(test_handler in n.alert_handlers)
+
+    def test_get_backend(self):
+        n = Node('testnode', "127.0.0.1", 1337, None, run=False)
+        with self.assertRaises(AttributeError):
+            n.get_backend()
+
 
 if __name__ == '__main__':
     unittest.main()
