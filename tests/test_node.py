@@ -1,4 +1,5 @@
 import unittest
+import pytest
 import sys
 import os
 
@@ -8,44 +9,74 @@ sys.path.append(DOSSIER_PARENT)
 
 from vespa.node import Node
 
+@pytest.fixture(scope='module')
+def node_instance():
+    n = Node('testnode', "127.0.0.1", 1337, None, run=False)
+    return n
 
-class TestCrypto(unittest.TestCase):
-    def test_encrypt(self):
-        n = Node('testnode', "127.0.0.1", 1337, None, run=False)
-        iv = "%16i" % 0
-        m = "hello"
-        c = n._encrypt(m, iv)
-        self.assertEqual(c, ('Y\xc8\x83V\xe4',
-                             '2dc4d9ee2b2f519dae0d9e55e1a3e512f30f2738'))
+def test_encrypt(node_instance):
+    iv = "%16i" % 0
+    m = "hello"
+    c = node_instance._encrypt(m, iv)
+    assert c ==  ('Y\xc8\x83V\xe4',
+                         '2dc4d9ee2b2f519dae0d9e55e1a3e512f30f2738')
 
-    def test_decrypt(self):
-        n = Node('testnode', "127.0.0.1", 1337, None, run=False)
-        iv = "%16i" % 0
-        m = "hello"
-        c = n._decrypt(m, iv, n._checksum(m))
-        self.assertEqual(c, 'Y\xf4\x14>\x1d')
+def test_decrypt(node_instance):
+    iv = "%16i" % 0
+    m = "hello"
+    c = node_instance._decrypt(m, iv, node_instance._checksum(m))
+    assert c == 'Y\xf4\x14>\x1d'
 
-    def test_checksum(self):
-        n = Node('testnode', "127.0.0.1", 1337, None, run=False)
-        c = n._checksum("hello")
-        self.assertEqual(c, 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d')
+def test_decrypt_bad_checksum(node_instance):
+    iv = "%16i" % 0
+    m = "hello"
+    with pytest.raises(Exception):
+        c = node_instance._decrypt(m, iv, node_instance._checksum("bad_hello"))
 
-    def test_encrypt_decrypt(self):
-        n = Node('testnode', "127.0.0.1", 1337, None, run=False)
-        iv = "%16i" % 0
-        m = "hello"
-        c = n._encrypt(m, iv)
-        m_d = c[0]
-        d = n._decrypt(m_d, iv, n._checksum(m_d))
-        self.assertEqual(d, m)
+def test_checksum(node_instance):
+    c = node_instance._checksum("hello")
+    assert c == 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d'
 
-    def test_register_handler(self):
-        def test_handler():
-            return "OK"
+def test_encrypt_decrypt(node_instance):
+    iv = "%16i" % 0
+    m = "hello"
+    c = node_instance._encrypt(m, iv)
+    m_d = c[0]
+    d = node_instance._decrypt(m_d, iv, node_instance._checksum(m_d))
+    assert d == m
 
-        n = Node('testnode', "127.0.0.1", 1337, None, run=False)
-        n.register_alert_handler(test_handler)
-        self.assertTrue(test_handler in n.alert_handlers)
+def test_register_handler(node_instance):
+    def test_handler():
+        return "OK"
+
+    node_instance.register_alert_handler(test_handler)
+    assert test_handler in node_instance.alert_handlers
+
+def test_get_backend(node_instance):
+    with pytest.raises(AttributeError):
+        node_instance.get_backend()
+
+def test_find_node_empty(node_instance):
+    assert node_instance.findNode("test_slave") == 'None'
+
+def test_register(node_instance):
+    node_instance.register("test_slave", "127.0.0.1", "31337")
+    assert ("test_slave", "127.0.0.1", 31337) in node_instance.list_slaves()
+
+def test_find_node(node_instance):
+    node_instance.register("test_find", "127.0.0.1", "31333")
+    assert (("test_slave", "127.0.0.1", 31337) == 
+            node_instance.findNode("test_slave"))
+
+def test_send_unknow(node_instance):
+    assert node_instance.send("hello") == ["help#"]
+
+def test_send_help(node_instance):
+    assert (node_instance.send("help|") ==
+            ['help#desc#destroy#findNode#get_backend#launch#list_slaves#'
+            'listen_interface#register#register_alert_handler#sendAlert'
+            '#sendRemote#sendRemotef#sendSocket#wait_backend#worker#'])
+
 
 if __name__ == '__main__':
     unittest.main()
