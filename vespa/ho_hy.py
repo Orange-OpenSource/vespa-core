@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: ho_hy.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -24,11 +24,13 @@
 Horizontal orchestrator
 """
 import socket
-from log_pipe import debug1
-from agent import Agent
-from ho import HO
+from .log_pipe import debug1
+from .agent import Agent
+from .ho import HO
+
 
 class HO_HY(HO):
+
     def __init__(self, name, host, port, master, run=True):
         super(HO_HY, self).__init__(name, host, port, master, run)
         self.have_backend = False
@@ -40,4 +42,3 @@ class HO_HY(HO):
 
     def ninjaMethod(self):
         pass
-

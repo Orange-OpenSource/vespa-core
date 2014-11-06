@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: supervisor.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -21,7 +21,7 @@
 # along with VESPA.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
-from SupervisorMainFrame import SupervisorMainFrame
+from .SupervisorMainFrame import SupervisorMainFrame
 
 if __name__ == '__main__':
     app = wx.App(redirect=True, filename="logwx.txt")

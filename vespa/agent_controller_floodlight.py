@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: agent_controller_floodlight.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -25,16 +25,26 @@ Agent to wrap Gandalf's controller
 """
 
 from logging import *
-from node import Node
+from .node import Node
 import Queue
 import urllib2
 
+
 class Agent_Controller_Floodlight(Node):
+
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = "12.0.0.20:9999"
         #self.floodlight = "12.0.0.10:8080"
         self.floodlight = "10.193.163.27:8080"
-        super(Agent_Controller_Floodlight, self,).__init__(name, host, port, master, run)
+        super(
+            Agent_Controller_Floodlight,
+            self,
+        ).__init__(
+            name,
+            host,
+            port,
+            master,
+            run)
         self.backend = self.desc()
 
     def _send_controller(self, msg):
@@ -68,20 +78,21 @@ class Agent_Controller_Floodlight(Node):
         nodes = []
         for link in jt:
             if link["src-switch"] not in nodes:
-                nodes.append( {'id':link["src-switch"]} )
+                nodes.append({'id': link["src-switch"]})
             if link["dst-switch"] not in nodes:
-                nodes.append( {'id':link["dst-switch"]} )
+                nodes.append({'id': link["dst-switch"]})
 
         edges = []
         for e in jt:
-          no = [ f['id'] for f in nodes ]
-          id1 = [ i for i,x in enumerate(no) if x == e["src-switch"] ][0]
-          id2 = [ i for i,x in enumerate(no) if x == e["dst-switch"] ][0]
-          edges.append( {"source": id1, "target":id2, "value":random.randint(0, 200)} )
-        #print self.switches,switches
-        #print self.links,edges
+            no = [f['id'] for f in nodes]
+            id1 = [i for i, x in enumerate(no) if x == e["src-switch"]][0]
+            id2 = [i for i, x in enumerate(no) if x == e["dst-switch"]][0]
+            edges.append(
+                {"source": id1, "target": id2, "value": random.randint(0, 200)})
+        # print self.switches,switches
+        # print self.links,edges
 
-        return {'links':edges,'nodes':nodes}
+        return {'links': edges, 'nodes': nodes}
 
     def get_link_stats(self, cmd='wm/topology/links/json'):
         links = self._send_controller_res(cmd)

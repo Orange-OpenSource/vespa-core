@@ -23,7 +23,7 @@
 """
 Controller
 """
-from log_pipe import *
+from .log_pipe import *
 import signal
 import time
 import json
@@ -34,6 +34,7 @@ import urlparse
 
 
 class HttpServerHandler(BaseHTTPRequestHandler):
+
     def do_GET(self):
         # content_length = int(self.headers.getheader("Content-Length"))
         # request = self.rfile.read(content_length)
@@ -53,8 +54,10 @@ class HttpServerHandler(BaseHTTPRequestHandler):
 
 
 class MyHTTPServer(HTTPServer):
+
     """this class is necessary to allow passing custom request handler into
        the RequestHandlerClass"""
+
     def __init__(self, server_address, RequestHandlerClass, handler, control):
         HTTPServer.__init__(self, server_address, RequestHandlerClass)
         self.handler = handler
@@ -62,6 +65,7 @@ class MyHTTPServer(HTTPServer):
 
 
 class HttpServer:
+
     def __init__(self, name, host, port, handler, c):
         self.name = name
         self.host = host
@@ -136,6 +140,7 @@ def server_handler(c, request):
 
 
 class Controller(object):
+
     def __init__(self, model, view):
         self.model = model
         self.view = view

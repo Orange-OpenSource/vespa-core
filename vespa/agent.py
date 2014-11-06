@@ -28,5 +28,6 @@ from node import Node
 
 
 class Agent(Node):
+
     def __init__(self, name, host, port, master, run=True):
         super(Agent, self,).__init__(name, host, port, master, run)

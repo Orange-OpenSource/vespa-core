@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: agent_connections.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -29,10 +29,10 @@ https://raw.github.com/arthurnn/SynFlood/master/synflood
 """
 
 import socket
-from log_pipe import *
+from .log_pipe import *
 from threading import Thread
 import subprocess
-from node import Node
+from .node import Node
 import Queue
 import os
 import psutil
@@ -42,7 +42,9 @@ EOT_FLAG = "EndOfTransmission"
 LIST_ITEM_SEPARATOR = ':'
 LIST_SEPARATOR = '\r'
 
+
 class Agent_Connections(Node):
+
     def __init__(self, name, host, port, master, run=True):
         # self.proc = None
         super(Agent_Connections, self,).__init__(name, host, port, master, run)
@@ -59,14 +61,24 @@ class Agent_Connections(Node):
 
             for conn in infos:
                 if conn.remote_address:
-                    addresses[conn.remote_address[0].replace(":", "").replace("f", "")] = 0
+                    addresses[
+                        conn.remote_address[0].replace(
+                            ":",
+                            "").replace(
+                            "f",
+                            "")] = 0
 
             for conn in infos:
                 if conn.remote_address:
-                    addresses[conn.remote_address[0].replace(":", "").replace("f", "")]+= 1
+                    addresses[
+                        conn.remote_address[0].replace(
+                            ":",
+                            "").replace(
+                            "f",
+                            "")] += 1
 
             for item in addresses:
-                intruders.append( {'ip':item, 'value':addresses[item] })
+                intruders.append({'ip': item, 'value': addresses[item]})
 
             self.sendAlert("ip_connections#%s" % intruders)
             #debug_info("Intruders: %s" % intruders)
@@ -77,7 +89,7 @@ class Agent_Connections(Node):
         res = []
         for p in psutil.process_iter():
             try:
-                res+= p.get_connections(kind='inet')
+                res += p.get_connections(kind='inet')
             except:
                 continue
         return res
@@ -94,9 +106,10 @@ class Agent_Connections(Node):
 
         for l in output.split("\n"):
             d = dict(zip(cols, l.split()))
-            if not d: continue
+            if not d:
+                continue
             if d['COMMAND'] not in res:
                 res[d['COMMAND']] = []
-            res[d['COMMAND']].append( d )
+            res[d['COMMAND']].append(d)
 
         return res

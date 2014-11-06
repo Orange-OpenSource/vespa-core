@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: agent_libvirt.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -68,22 +68,29 @@ d.info                         d.reset                        d.vcpusFlags
 
 """
 import socket
-from log_pipe import debug1
-from agent import Agent
+from .log_pipe import debug1
+from .agent import Agent
 
 # End Flag
 EOT_FLAG = "EndOfTransmission"
 LIST_ITEM_SEPARATOR = ':'
 LIST_SEPARATOR = '\r'
 
+
 class Agent_Libvirt(Agent):
-    #def __init__(self, name, host, port, master, libvirt_host, libvirt_port, libvirt_user):
+    # def __init__(self, name, host, port, master, libvirt_host, libvirt_port,
+    # libvirt_user):
+
     def __init__(self, name, host, port, master, run=True):
         super(Agent_Libvirt, self).__init__(name, host, port, master, run)
         self.libvirt_host = host
         self.libvirt_port = 22
         self.libvirt_user = "root"
-        self.backend = ("libvirt", self.libvirt_host, self.libvirt_port, self.libvirt_user)
+        self.backend = (
+            "libvirt",
+            self.libvirt_host,
+            self.libvirt_port,
+            self.libvirt_user)
         self.have_backend = False
 
     def launch(self):
@@ -119,53 +126,114 @@ class Agent_Libvirt(Agent):
 #        raise Exception("Cannot find node %s" % nodeName)
 
     def cut_link(self, nodeName="arch-poc-win"):
-        conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
+        conn_local = libvirt.open(
+            "qemu+ssh://" +
+            self.libvirt_user +
+            "@" +
+            self.libvirt_host +
+            "/system")
         domNode = self.__get_dom_name(nodeName, conn_local)
 
         parsed = xml.dom.minidom.parseString(domNode.XMLDesc(0))
         node_interface = parsed.getElementsByTagName("interface")[0]
-        link_to_cut = node_interface.getElementsByTagName("target")[0].getAttribute("dev")
-        bridge = node_interface.getElementsByTagName("source")[0].getAttribute("bridge")
+        link_to_cut = node_interface.getElementsByTagName(
+            "target")[0].getAttribute("dev")
+        bridge = node_interface.getElementsByTagName(
+            "source")[0].getAttribute("bridge")
 
         # Cutting link
-        os.system("ssh " + self.libvirt_user + "@" + self.libvirt_host + " \"brctl delif " + bridge + " " + link_to_cut + "\"")
+        os.system(
+            "ssh " +
+            self.libvirt_user +
+            "@" +
+            self.libvirt_host +
+            " \"brctl delif " +
+            bridge +
+            " " +
+            link_to_cut +
+            "\"")
 
-        return [ "Closed link " + link_to_cut + " from " + bridge + " for VM " + nodeName ]
+        return ["Closed link " + link_to_cut +
+                " from " + bridge + " for VM " + nodeName]
 
     def connect_link(self, nodeName="arch-poc-win"):
-        conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
+        conn_local = libvirt.open(
+            "qemu+ssh://" +
+            self.libvirt_user +
+            "@" +
+            self.libvirt_host +
+            "/system")
 
         domNode = self.__get_dom_name(nodeName, conn_local)
 
         parsed = xml.dom.minidom.parseString(domNode.XMLDesc(0))
 
         node_interface = parsed.getElementsByTagName("interface")[0]
-        link_to_cut = node_interface.getElementsByTagName("target")[0].getAttribute("dev")
-        bridge = node_interface.getElementsByTagName("source")[0].getAttribute("bridge")
+        link_to_cut = node_interface.getElementsByTagName(
+            "target")[0].getAttribute("dev")
+        bridge = node_interface.getElementsByTagName(
+            "source")[0].getAttribute("bridge")
 
-        os.system("ssh " + self.libvirt_user + "@" + self.libvirt_host + " \"brctl addif " + bridge + " " + link_to_cut + "\"")
+        os.system(
+            "ssh " +
+            self.libvirt_user +
+            "@" +
+            self.libvirt_host +
+            " \"brctl addif " +
+            bridge +
+            " " +
+            link_to_cut +
+            "\"")
 
-        return [ "Connected link " + link_to_cut + " to " + bridge + " for VM " + nodeName]
+        return ["Connected link " + link_to_cut +
+                " to " + bridge + " for VM " + nodeName]
 
     def migrate(self, nodeName, quarantine, quarantine_user):
-        conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
-        conn_quarantine = libvirt.open("qemu+ssh://" + quarantine_user + "@" + quarantine + "/system")
+        conn_local = libvirt.open(
+            "qemu+ssh://" +
+            self.libvirt_user +
+            "@" +
+            self.libvirt_host +
+            "/system")
+        conn_quarantine = libvirt.open(
+            "qemu+ssh://" +
+            quarantine_user +
+            "@" +
+            quarantine +
+            "/system")
         domNode = self.__get_dom_name(nodeName, conn_local)
-        domNode.migrate(conn_quarantine, libvirt.VIR_MIGRATE_LIVE, None, None, 0)
-        return [ "Migrated VM " + nodeName + " to quarantine"]
+        domNode.migrate(
+            conn_quarantine,
+            libvirt.VIR_MIGRATE_LIVE,
+            None,
+            None,
+            0)
+        return ["Migrated VM " + nodeName + " to quarantine"]
 
     def contains_vm(self, vm):
         try:
-            conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
+            conn_local = libvirt.open(
+                "qemu+ssh://" +
+                self.libvirt_user +
+                "@" +
+                self.libvirt_host +
+                "/system")
             self.__get_dom_name(vm, conn_local)
             return True
         except Exception:
             return False
 
     def send_key(self, vm, args):
-        conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
+        conn_local = libvirt.open(
+            "qemu+ssh://" +
+            self.libvirt_user +
+            "@" +
+            self.libvirt_host +
+            "/system")
         wokeup = False
-        debug1(self.name + ">Waiting for vm %s to wake up on %s" % (vm, self.libvirt_host) )
+        debug1(
+            self.name + ">Waiting for vm %s to wake up on %s" %
+            (vm, self.libvirt_host))
         vm_name, vm_host, vm_port = eval(vm)
         while not wokeup:
             try:
@@ -176,7 +244,7 @@ class Agent_Libvirt(Agent):
                 continue
         print "sending '%s'" % args
         dom.sendKey(*eval(args))
-        return [ "Sent keys to the vm %s" % vm_name ]
+        return ["Sent keys to the vm %s" % vm_name]
 
     def restart(self, vm):
         import libvirt
@@ -186,11 +254,16 @@ class Agent_Libvirt(Agent):
         import xml.dom.minidom
 
         #conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
-        conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
+        conn_local = libvirt.open(
+            "qemu+ssh://" +
+            self.libvirt_user +
+            "@" +
+            self.libvirt_host +
+            "/system")
         vm_name, vm_host, vm_port = eval(vm)
         dom = self.__get_dom_name(vm_name, conn_local)
         dom.create()
-        return [ "VM %s restarted" % vm_name ]
+        return ["VM %s restarted" % vm_name]
 
     def restart_hard(self, vm):
         import libvirt
@@ -200,7 +273,12 @@ class Agent_Libvirt(Agent):
         import xml.dom.minidom
 
         #conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
-        conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
+        conn_local = libvirt.open(
+            "qemu+ssh://" +
+            self.libvirt_user +
+            "@" +
+            self.libvirt_host +
+            "/system")
         vm_name, vm_host, vm_port = eval(vm)
         dom = self.__get_dom_name(vm_name, conn_local)
         try:
@@ -208,4 +286,4 @@ class Agent_Libvirt(Agent):
         except:
             pass
         dom.create()
-        return [ "VM %s restarted (hard)" % vm_name ]
+        return ["VM %s restarted (hard)" % vm_name]

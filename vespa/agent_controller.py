@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: agent_controller.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -25,13 +25,15 @@ Agent to wrap Gandalf's controller
 """
 
 from logging import *
-from node import Node
+from .node import Node
 import Queue
 import json
 import urllib
 import urllib2
 
+
 class Agent_Controller(Node):
+
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = "12.0.0.3"
         super(Agent_Controller, self,).__init__(name, host, port, master, run)
@@ -39,7 +41,7 @@ class Agent_Controller(Node):
 
     def alert_ip(self, ip, mac):
         url = 'http://%s/' % self.controller_ip
-        values = { 'mac': mac }
+        values = {'mac': mac}
         data = urllib.urlencode(values)
         print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Sending mac %s to %s' % (mac, url)
         req = urllib2.Request(url, data)
