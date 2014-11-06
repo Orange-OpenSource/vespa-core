@@ -48,7 +48,7 @@ class TestFindNodeModel(unittest.TestCase):
     def test_no_node(self):
         m = Model()
         self.assertEquals(m.name, "model")
-        with self.assertRaises(Exception):
+        with pytest.raises(Exception):
             m.findNode("XXX")
         m.destroy()
         time.sleep(1)
@@ -116,7 +116,7 @@ class TestInitModelExceptionNoKey(unittest.TestCase):
         p.write(conf)
 
     def test_init_model_no_master(self):
-        with self.assertRaises(ImportError):
+        with pytest.raises(ImportError):
             m = Model()
 
 
@@ -131,7 +131,7 @@ class TestInitModelExceptionNoVO(unittest.TestCase):
         p.write(conf)
 
     def test_init_model_no_vo(self):
-        with self.assertRaises(KeyError):
+        with pytest.raises(KeyError):
             m = Model()
 
 
