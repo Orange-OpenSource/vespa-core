@@ -451,7 +451,7 @@ class PThread(Thread):
             debug_comm('[%sW] Integrity error for json message,'
                        'skipping data ' % self.name)
             debug_comm('%s :: %s' % (auth, self._checksum(msg)))
-            return
+            raise Exception("Bad checksum when decrypting message")
         cipher = AES.new(self.key, AES.MODE_CFB, iv)
         return cipher.decrypt(msg)
         # gcm = AES_GCM(self.key)

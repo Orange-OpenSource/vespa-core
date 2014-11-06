@@ -4,3 +4,4 @@
 *.profile
 .coverage
 vespa/config.ini
+htmlcov/
