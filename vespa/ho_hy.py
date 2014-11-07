@@ -2,7 +2,7 @@
 #
 # Module name: ho_hy.py
 # Version:     1.0
-# Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
+# Created:     29/04/2014 by AurÃ©lien Wailly <aurelien.wailly@orange.com>
 #
 # Copyright (C) 2010-2014 Orange
 #

@@ -33,7 +33,7 @@ The tutorial (branch tutorial) delivers the basic of agent implementation and ho
 
 ## Contributors
 
-Aurélien Wailly, Marc Lacoste, Kévin Grandemange, Aymerik Tabourin.
+AurÃ©lien Wailly, Marc Lacoste, KÃ©vin Grandemange, Aymerik Tabourin.
 
 ## License
 

@@ -2,7 +2,7 @@
 #
 # Module name: SupervisorMainFrame.py
 # Version:     1.0
-# Created:     29/04/2014 by Aur�lien Wailly <aurelien.wailly@orange.com>
+# Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
 #
 # Copyright (C) 2010-2014 Orange
 #
@@ -280,7 +280,7 @@ class SupervisorMainFrame(view_core.MainFrame):
         # self.displayNodeResult( result )
 
     def updateTreeSelection(self, event):
-        # Mise à jour informations
+        # Mise Ã  jour informations
         pass
 
     def displayConsole(self, msg):
