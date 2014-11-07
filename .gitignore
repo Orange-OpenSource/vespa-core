@@ -5,3 +5,4 @@
 .coverage
 vespa/config.ini
 htmlcov/
+docs/_build
