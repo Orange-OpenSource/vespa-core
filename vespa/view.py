@@ -21,8 +21,7 @@
 # along with VESPA.  If not, see <http://www.gnu.org/licenses/>.
 
 
-class View():
-
+class View(object):
     def __init__(self, model):
         self.model = model
 

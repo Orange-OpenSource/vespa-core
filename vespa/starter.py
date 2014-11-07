@@ -3,7 +3,7 @@
 #
 # Module name: starter.py
 # Version:     1.0
-# Created:     29/04/2014 by AurÃ©lien Wailly <aurelien.wailly@orange.com>
+# Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
 #
 # Copyright (C) 2010-2014 Orange
 #
@@ -31,10 +31,10 @@ DOSSIER_COURRANT = os.path.dirname(os.path.abspath(__file__))
 DOSSIER_PARENT = os.path.dirname(DOSSIER_COURRANT)
 sys.path.append(DOSSIER_PARENT)
 
-from .model import Model
-from .view import View
-from .controller import Controller
-from .log_pipe import *
+from model import Model
+from view import View
+from controller import Controller
+from log_pipe import *
 
 if __name__ == "__main__":
     debug5("Configuring model")
