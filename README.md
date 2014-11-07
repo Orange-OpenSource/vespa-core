@@ -2,6 +2,8 @@
 
 This project is the core of the VESPA framework. It can enable communications between heterogeneous components.
 
+[![Build Status](https://travis-ci.org/Orange-OpenSource/vespa-core.svg?branch=master)](https://travis-ci.org/Orange-OpenSource/vespa-core) [![Build Status](https://readthedocs.org/projects/vespa-core/badge/?version=latest)](http://vespa-core.readthedocs.org/en/latest/)
+
 ## Code Example
 
 The politics are defined as Finite State Machine in Python. It enables easy parametrization and comprehensive view of autonomic loops. The ``alert`` function is the main component of the orchestration.

@@ -4,6 +4,7 @@ python:
   - "2.7"
 branches:
   only:
+    - master
     - tutorial
 install:
   - pip install -r requirements.txt --use-mirrors
