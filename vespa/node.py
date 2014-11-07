@@ -58,6 +58,7 @@ RECV_LENGTH = 4096
 
 
 class PThread(Thread):
+
     def __init__(self, name, host, port, master, run=True):
         Thread.__init__(self)
         self.host = host
@@ -74,7 +75,7 @@ class PThread(Thread):
         self.threads = []
         self.interface_threads = []
         # self.key = int("VESPAVESPAVESPA1".encode("hex"))
-        self.key = "VESPA"*6 + "12"
+        self.key = "VESPA" * 6 + "12"
         if run:
             self.start()
             t = ThreadWorker(target=self.launch)
@@ -209,7 +210,7 @@ class PThread(Thread):
         such as alerts.
         """
         name, host, port = remote
-        while 1:
+        while True:
             try:
                 debug_comm_len("[%s] Trying to send: %s -> %s" %
                                (self.name, remote, msg))
@@ -242,7 +243,8 @@ class PThread(Thread):
                     # s.close()
                     debug_comm('[%s] Received %s' % (self.name, repr(data)))
                 return data
-            except socket.error, (errno, strerror):
+            except socket.error as xxx_todo_changeme:
+                (errno, strerror) = xxx_todo_changeme.args
                 if errno in [32, 104, 111, 10057, 10061]:
                     debug_comm("[%s] Connection reset by peer, recreating" %
                                self.name)
@@ -466,6 +468,7 @@ class PThread(Thread):
 
 class Node(PThread):
     # Overrides threading.Thread.run()
+
     def run(self):
         profiler = cProfile.Profile()
         try:
@@ -476,6 +479,7 @@ class Node(PThread):
 
 class ThreadWorker(Thread):
     # Overrides threading.Thread.run()
+
     def run(self):
         profiler = cProfile.Profile()
         try:

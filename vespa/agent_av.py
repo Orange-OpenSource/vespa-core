@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: agent_av.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -23,10 +23,12 @@
 Agent representation
 """
 import socket
-from log_pipe import debug1
-from agent import Agent
+from .log_pipe import debug1
+from .agent import Agent
+
 
 class Agent_AV(Agent):
+
     def __init__(self, name, host, port, master, vm):
         super(Agent_AV, self).__init__(name, host, port, master)
         self.have_backend = True
@@ -41,7 +43,7 @@ class Agent_AV(Agent):
             for item, status in predefined_list:
                 msg += item + "#"
         elif command == 'register_handler':
-            msg += '%s#%s#' % ( self.host, self.port )
+            msg += '%s#%s#' % (self.host, self.port)
         # Normal socket connection
         if self.is_backend_reachable:
             data = super(Agent_AV, self).send(msg)
@@ -51,8 +53,10 @@ class Agent_AV(Agent):
                 # conn_local = libvirt.open("qemu+ssh://" + self.agent_hy.host + "/system")
                 # dom = self.agent_hy.__get_dom_name(self.vm, conn_local)
                 # dom.sendKey(8, 10, [ 0x12, 0x42 ], 2, 0)
-                args = (8, 10, [ 0x12, 0x42 ], 2, 0)
-                data = self.sendRemote(self.agent_hy, "send_key|%s#%s" % (self.backend, args) )
+                args = (8, 10, [0x12, 0x42], 2, 0)
+                data = self.sendRemote(
+                    self.agent_hy, "send_key|%s#%s" %
+                    (self.backend, args))
             else:
                 data = super(Agent_AV, self).send(msg)
                 # data = [ "Unsupported sysrq method" ]
@@ -61,24 +65,28 @@ class Agent_AV(Agent):
 
     def dump_analyzed_file_list(self):
         try:
-            agent_vm = self # self.findAgent('agent_av')
+            agent_vm = self  # self.findAgent('agent_av')
             raw_msg = agent_vm.send("dump_list|")[0]
             command = raw_msg.split('|')[0]
             title_list = raw_msg.split('|')[1]
             file_list_raw = raw_msg.split('|')[2]
             file_list = []
-            file_list.append( (title_list.split(LIST_ITEM_SEPARATOR)[0], title_list.split(LIST_ITEM_SEPARATOR)[1]) )
+            file_list.append(
+                (title_list.split(LIST_ITEM_SEPARATOR)[0],
+                 title_list.split(LIST_ITEM_SEPARATOR)[1]))
             # It can be an error
             if LIST_SEPARATOR not in file_list_raw:
-                return [ file_list_raw ]
+                return [file_list_raw]
             # Otherwise, it can be a list
             for scan_result in file_list_raw.split(LIST_SEPARATOR):
                 # It can be an error, last line is messy
                 if ':' not in scan_result:
                     continue
-                name = ":".join(scan_result.split(LIST_ITEM_SEPARATOR)[0:2]).strip()
+                name = ":".join(
+                    scan_result.split(LIST_ITEM_SEPARATOR)[
+                        0:2]).strip()
                 status = scan_result.split(LIST_ITEM_SEPARATOR)[2].strip()
-                file_list.append( (name, status) )
+                file_list.append((name, status))
             return file_list
         except Exception as e:
             debug1("[-] Error: %s" % (e))

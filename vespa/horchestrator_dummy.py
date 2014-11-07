@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: horchestrator_dummy.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -24,11 +24,13 @@
 Horizontal orchestrator
 """
 import socket
-from log_pipe import debug1
-from agent import Agent
+from .log_pipe import debug1
+from .agent import Agent
 from horchestrator import HO
 
+
 class HO_dummy(HO):
+
     def __init__(self, name, host, port, master):
         super(HO_dummy, self).__init__(name, host, port, master)
         self.have_backend = False
@@ -39,4 +41,3 @@ class HO_dummy(HO):
 
     def ninjaMethod(self):
         pass
-

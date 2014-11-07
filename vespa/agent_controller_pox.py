@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 
+#
 # Module name: agent_controller_pox.py
 # Version:     1.0
 # Created:     29/04/2014 by Aurélien Wailly <aurelien.wailly@orange.com>
@@ -25,7 +25,7 @@ Agent to wrap Gandalf's controller
 """
 
 from logging import *
-from node import Node
+from .node import Node
 import Queue
 import json
 import urllib
@@ -37,71 +37,81 @@ import argparse
 
 mychannel = 'mac_redir'
 
+
 class Agent_Controller_Pox(Node):
+
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = '10.193.163.27'
-        super(Agent_Controller_Pox, self,).__init__(name, host, port, master, run)
+        super(
+            Agent_Controller_Pox,
+            self,
+        ).__init__(
+            name,
+            host,
+            port,
+            master,
+            run)
         self.backend = self.desc()
 
     def _send_controller(self, cmd):
-        host = self.controller_ip # '10.193.163.27' # p-rambo
+        host = self.controller_ip  # '10.193.163.27' # p-rambo
         port = 7790
 
         try:
-          sock = socket.socket()
-          sock.connect((host,port))
-          msg = {
-              'CHANNEL' : '',
-              'cmd' : 'join_channel',
-              'channel' : mychannel,
-              'json' : True,
-          }
-          sock.send(json.dumps(msg))
+            sock = socket.socket()
+            sock.connect((host, port))
+            msg = {
+                'CHANNEL': '',
+                'cmd': 'join_channel',
+                'channel': mychannel,
+                'json': True,
+            }
+            sock.send(json.dumps(msg))
 
-          msg = {
-              'CHANNEL' : mychannel,
-              'cmd' : cmd,
-          }
-          sock.send(json.dumps(msg))
+            msg = {
+                'CHANNEL': mychannel,
+                'cmd': cmd,
+            }
+            sock.send(json.dumps(msg))
         except:
-          pass
+            pass
 
         try:
-          sock.close()
+            sock.close()
         except:
-          pass
+            pass
 
         return "Ok"
 
     def _send_controller_res(self, cmd):
-        host = self.controller_ip # '10.193.163.27' # p-rambo
+        host = self.controller_ip  # '10.193.163.27' # p-rambo
         port = 7790
 
         sock = socket.socket()
-        sock.connect((host,port))
+        sock.connect((host, port))
         msg = {
-            'CHANNEL' : '',
-            'cmd' : 'join_channel',
-            'channel' : mychannel,
-            'json' : True,
+            'CHANNEL': '',
+            'cmd': 'join_channel',
+            'channel': mychannel,
+            'json': True,
         }
         sock.send(json.dumps(msg))
 
         msg = {
-            'CHANNEL' : mychannel,
-            'cmd' : cmd,
+            'CHANNEL': mychannel,
+            'cmd': cmd,
         }
         sock.send(json.dumps(msg))
 
         cmd_welcome = True
         while cmd_welcome:
-          d = sock.recv(4096)
-          cmd_welcome = ("welcome" in d)
+            d = sock.recv(4096)
+            cmd_welcome = ("welcome" in d)
 
         try:
-          sock.close()
+            sock.close()
         except:
-          pass
+            pass
         print repr(d)
 
         return json.loads(d)
