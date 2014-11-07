@@ -34,7 +34,6 @@ config_filename = "config.ini"
 
 
 class Model(Node):
-
     def __init__(self):
         super(Node, self,).__init__("model", localhost, 4100, None)
         self.name = "model"

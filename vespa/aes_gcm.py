@@ -41,7 +41,6 @@ def gf_2_128_mul(x, y):
 
 
 class InvalidInputException(Exception):
-
     def __init__(self, msg):
         self.msg = msg
 
@@ -50,14 +49,12 @@ class InvalidInputException(Exception):
 
 
 class InvalidTagException(Exception):
-
     def __str__(self):
         return 'The authenticaiton tag is invalid.'
 
 
 # Galois/Counter Mode with AES-128 and 96-bit IV
 class AES_GCM:
-
     def __init__(self, master_key):
         self.change_key(master_key)
 
