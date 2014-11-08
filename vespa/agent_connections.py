@@ -81,7 +81,7 @@ class Agent_Connections(Node):
                 intruders.append({'ip': item, 'value': addresses[item]})
 
             self.sendAlert("ip_connections#%s" % intruders)
-            #debug_info("Intruders: %s" % intruders)
+            # debug_info("Intruders: %s" % intruders)
 
             time.sleep(1)
 
@@ -101,7 +101,8 @@ class Agent_Connections(Node):
         p1 = Popen(['lsof', '-ni'], stdout=PIPE)
         p2 = Popen(["grep", "LISTEN"], stdin=p1.stdout, stdout=PIPE)
         output = p2.communicate()[0]
-        cols = "COMMAND     PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME".split()
+        cols = ("COMMAND     PID USER   FD   TYPE DEVICE SIZE/OFF"
+                "NODE NAME").split()
         res = {}
 
         for l in output.split("\n"):
