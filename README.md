@@ -4,6 +4,10 @@ This project is the core of the VESPA framework. It can enable communications be
 
 [![Build Status](https://travis-ci.org/Orange-OpenSource/vespa-core.svg?branch=master)](https://travis-ci.org/Orange-OpenSource/vespa-core) [![Build Status](https://readthedocs.org/projects/vespa-core/badge/?version=latest)](http://vespa-core.readthedocs.org/en/latest/)
 
+## Getting started
+
+The tutorial (branch tutorial) delivers the basic of agent implementation and how to manage alerts on the Vertical Orchestrator.
+
 ## Code Example
 
 The politics are defined as Finite State Machine in Python. It enables easy parametrization and comprehensive view of autonomic loops. The ``alert`` function is the main component of the orchestration.
@@ -25,13 +29,29 @@ cd vespa-core
 
 A convenient way to start is to follow the tutorial (branch tutorial) and setup a local environment.
 
-## API Reference
+## Documentation
 
-The API of nodes is described into the code headers, and will be available as a doxygen API soon.
+The [documentation](http://vespa-core.readthedocs.org/en/latest/) is available on readthedocs.org.
+
+The API of nodes is described into the code as docstrings. It can be built to another format using the following command in the root directory :
+
+```bash
+sphinx-apidoc2 -F -o docs vespa
+```
 
 ## Tests
 
-The tutorial (branch tutorial) delivers the basic of agent implementation and how to manage alerts on the Vertical Orchestrator.
+Numerous unit tests are defined to test various code functionality. You can run the test suite with the following commands in the root directory :
+
+```bash
+python2 setup.py test
+```
+
+or
+
+```bash
+py.test2
+```
 
 ## Contributors
 
