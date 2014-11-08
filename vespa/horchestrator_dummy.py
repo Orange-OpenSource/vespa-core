@@ -26,7 +26,7 @@ Horizontal orchestrator
 import socket
 from .log_pipe import debug1
 from .agent import Agent
-from horchestrator import HO
+from ho import HO
 
 
 class HO_dummy(HO):
