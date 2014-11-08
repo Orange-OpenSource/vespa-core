@@ -2,7 +2,7 @@
 
 This project is the core of the VESPA framework. It can enable communications between heterogeneous components.
 
-[![Build Status](https://travis-ci.org/Orange-OpenSource/vespa-core.svg?branch=master)](https://travis-ci.org/Orange-OpenSource/vespa-core) [![Build Status](https://readthedocs.org/projects/vespa-core/badge/?version=latest)](http://vespa-core.readthedocs.org/en/latest/)
+[![Build Status](https://travis-ci.org/Orange-OpenSource/vespa-core.svg?branch=master)](https://travis-ci.org/Orange-OpenSource/vespa-core) [![Build Status](https://readthedocs.org/projects/vespa-core/badge/?version=latest)](http://vespa-core.readthedocs.org/en/latest/) [![Coverage Status](https://img.shields.io/coveralls/Orange-OpenSource/vespa-core.svg)](https://coveralls.io/r/Orange-OpenSource/vespa-core)
 
 ## Getting started
 
