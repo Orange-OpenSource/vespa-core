@@ -34,7 +34,7 @@ class Agent_Controller_Floodlight(Node):
 
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = "12.0.0.20:9999"
-        #self.floodlight = "12.0.0.10:8080"
+        # self.floodlight = "12.0.0.10:8080"
         self.floodlight = "10.193.163.27:8080"
         super(
             Agent_Controller_Floodlight,
@@ -87,8 +87,9 @@ class Agent_Controller_Floodlight(Node):
             no = [f['id'] for f in nodes]
             id1 = [i for i, x in enumerate(no) if x == e["src-switch"]][0]
             id2 = [i for i, x in enumerate(no) if x == e["dst-switch"]][0]
-            edges.append(
-                {"source": id1, "target": id2, "value": random.randint(0, 200)})
+            edges.append({"source": id1,
+                          "target": id2,
+                          "value": random.randint(0, 200)})
         # print self.switches,switches
         # print self.links,edges
 

@@ -43,7 +43,7 @@ class Agent_Controller(Node):
         url = 'http://%s/' % self.controller_ip
         values = {'mac': mac}
         data = urllib.urlencode(values)
-        print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Sending mac %s to %s' % (mac, url)
+        print '!!!!!!!!!!!!!!!!!!!!! Sending mac %s to %s' % (mac, url)
         req = urllib2.Request(url, data)
         response = urllib2.urlopen(req)
         the_page = response.read()

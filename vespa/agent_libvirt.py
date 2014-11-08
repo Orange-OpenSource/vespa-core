@@ -25,46 +25,46 @@ Agent representation
 
 Available for domains:
 
-d.ID                           d.injectNMI                    d.resume
-d.OSType                       d.interfaceParameters          d.revertToSnapshot
-d.UUID                         d.interfaceStats               d.save
-d.UUIDString                   d.isActive                     d.saveFlags
-d.XMLDesc                      d.isPersistent                 d.schedulerParameters
-d.abortJob                     d.isUpdated                    d.schedulerParametersFlags
-d.attachDevice                 d.jobInfo                      d.schedulerType
-d.attachDeviceFlags            d.jobStats                     d.screenshot
-d.autostart                    d.listAllSnapshots             d.sendKey
-d.blkioParameters              d.managedSave                  d.sendProcessSignal
-d.blockCommit                  d.managedSaveRemove            d.setAutostart
-d.blockInfo                    d.maxMemory                    d.setBlkioParameters
-d.blockIoTune                  d.maxVcpus                     d.setBlockIoTune
-d.blockJobAbort                d.memoryParameters             d.setInterfaceParameters
-d.blockJobInfo                 d.memoryPeek                   d.setMaxMemory
-d.blockJobSetSpeed             d.memoryStats                  d.setMemory
-d.blockPeek                    d.metadata                     d.setMemoryFlags
-d.blockPull                    d.migrate                      d.setMemoryParameters
-d.blockRebase                  d.migrate2                     d.setMemoryStatsPeriod
-d.blockResize                  d.migrate3                     d.setMetadata
-d.blockStats                   d.migrateGetCompressionCache   d.setNumaParameters
-d.blockStatsFlags              d.migrateGetMaxSpeed           d.setSchedulerParameters
-d.connect                      d.migrateSetCompressionCache   d.setSchedulerParametersFlags
-d.controlInfo                  d.migrateSetMaxDowntime        d.setVcpus
-d.coreDump                     d.migrateSetMaxSpeed           d.setVcpusFlags
-d.create                       d.migrateToURI                 d.shutdown
-d.createWithFiles              d.migrateToURI2                d.shutdownFlags
-d.createWithFlags              d.migrateToURI3                d.snapshotCreateXML
-d.destroy                      d.name                         d.snapshotCurrent
-d.destroyFlags                 d.numaParameters               d.snapshotListNames
-d.detachDevice                 d.openChannel                  d.snapshotLookupByName
-d.detachDeviceFlags            d.openConsole                  d.snapshotNum
-d.diskErrors                   d.openGraphics                 d.state
-d.emulatorPinInfo              d.pMSuspendForDuration         d.suspend
-d.fSTrim                       d.pMWakeup                     d.undefine
-d.getCPUStats                  d.pinEmulator                  d.undefineFlags
-d.hasCurrentSnapshot           d.pinVcpu                      d.updateDeviceFlags
-d.hasManagedSaveImage          d.pinVcpuFlags                 d.vcpuPinInfo
-d.hostname                     d.reboot                       d.vcpus
-d.info                         d.reset                        d.vcpusFlags
+d.ID                  d.injectNMI                  d.resume
+d.OSType              d.interfaceParameters        d.revertToSnapshot
+d.UUID                d.interfaceStats             d.save
+d.UUIDString          d.isActive                   d.saveFlags
+d.XMLDesc             d.isPersistent               d.schedulerParameters
+d.abortJob            d.isUpdated                  d.schedulerParametersFlags
+d.attachDevice        d.jobInfo                    d.schedulerType
+d.attachDeviceFlags   d.jobStats                   d.screenshot
+d.autostart           d.listAllSnapshots           d.sendKey
+d.blkioParameters     d.managedSave                d.sendProcessSignal
+d.blockCommit         d.managedSaveRemove          d.setAutostart
+d.blockInfo           d.maxMemory                  d.setBlkioParameters
+d.blockIoTune         d.maxVcpus                   d.setBlockIoTune
+d.blockJobAbort       d.memoryParameters           d.setInterfaceParameters
+d.blockJobInfo        d.memoryPeek                 d.setMaxMemory
+d.blockJobSetSpeed    d.memoryStats                d.setMemory
+d.blockPeek           d.metadata                   d.setMemoryFlags
+d.blockPull           d.migrate                    d.setMemoryParameters
+d.blockRebase         d.migrate2                   d.setMemoryStatsPeriod
+d.blockResize         d.migrate3                   d.setMetadata
+d.blockStats          d.migrateGetCompressionCache d.setNumaParameters
+d.blockStatsFlags     d.migrateGetMaxSpeed         d.setSchedulerParameters
+d.connect            d.migrateSetCompressionCache d.setSchedulerParametersFlags
+d.controlInfo         d.migrateSetMaxDowntime      d.setVcpus
+d.coreDump            d.migrateSetMaxSpeed         d.setVcpusFlags
+d.create              d.migrateToURI               d.shutdown
+d.createWithFiles     d.migrateToURI2              d.shutdownFlags
+d.createWithFlags     d.migrateToURI3              d.snapshotCreateXML
+d.destroy             d.name                       d.snapshotCurrent
+d.destroyFlags        d.numaParameters             d.snapshotListNames
+d.detachDevice        d.openChannel                d.snapshotLookupByName
+d.detachDeviceFlags   d.openConsole                d.snapshotNum
+d.diskErrors          d.openGraphics               d.state
+d.emulatorPinInfo     d.pMSuspendForDuration       d.suspend
+d.fSTrim              d.pMWakeup                   d.undefine
+d.getCPUStats         d.pinEmulator                d.undefineFlags
+d.hasCurrentSnapshot  d.pinVcpu                    d.updateDeviceFlags
+d.hasManagedSaveImage d.pinVcpuFlags               d.vcpuPinInfo
+d.hostname            d.reboot                     d.vcpus
+d.info                d.reset                      d.vcpusFlags
 
 """
 import socket
@@ -253,7 +253,6 @@ class Agent_Libvirt(Agent):
         import time
         import xml.dom.minidom
 
-        #conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
         conn_local = libvirt.open(
             "qemu+ssh://" +
             self.libvirt_user +
@@ -272,7 +271,6 @@ class Agent_Libvirt(Agent):
         import time
         import xml.dom.minidom
 
-        #conn_local = libvirt.open("qemu+ssh://" + self.libvirt_user + "@" + self.libvirt_host + "/system")
         conn_local = libvirt.open(
             "qemu+ssh://" +
             self.libvirt_user +

@@ -53,11 +53,11 @@ class SupervisorMainFrame(view_core.MainFrame):
         self.UVMCleaning = False
         self.UVMCutConn = False
         self.globalText = ""
-        #self.moveRect( self.rectVM1Pong, 475, 125 )
+        # self.moveRect( self.rectVM1Pong, 475, 125 )
         # while self.rectVM1Pong.x != 475:
         #    time.sleep(5)
-        #self.moveRect( self.rectVM1Pong, 125, 125 )
-        #self.UVMInfected = True
+        # self.moveRect( self.rectVM1Pong, 125, 125 )
+        # self.UVMInfected = True
         self.lnumber = 0
         self.InfoGrid.AppendCols(2)
         self.ioports = {}
@@ -68,7 +68,8 @@ class SupervisorMainFrame(view_core.MainFrame):
     def onClose(self, event):
         dlg = wx.MessageDialog(self,
                                "Do you really want to close this application?",
-                               "Confirm Exit", wx.OK | wx.CANCEL | wx.ICON_QUESTION)
+                               "Confirm Exit",
+                               wx.OK | wx.CANCEL | wx.ICON_QUESTION)
         result = dlg.ShowModal()
         dlg.Destroy()
         if result == wx.ID_OK:
@@ -98,14 +99,14 @@ class SupervisorMainFrame(view_core.MainFrame):
                 # print(repr(message))
                 fulllist = eval(message.split('#')[-1])
                 # TODO Fix bug.so
-                #fulllist = fulllist[1:]
+                # fulllist = fulllist[1:]
                 for itm in fulllist:
-                    #print("item:%s" % repr(itm))
+                    # print("item:%s" % repr(itm))
                     port = itm.split(" ")[1].split('=')[-1]
                     valeur = itm.split(" ")[2].split("=")[-1]
-                    #self.displayConsole("%s" % event.data)
+                    # self.displayConsole("%s" % event.data)
                     # Unroll for speed
-                    #self.appendInfoGrid(port, valeur)
+                    # self.appendInfoGrid(port, valeur)
                     self.ioports[port] = valeur
 
                 if self.InfoGrid.GetNumberRows() < len(self.ioports):
@@ -131,7 +132,7 @@ class SupervisorMainFrame(view_core.MainFrame):
                                     (source, message.split("=")[-1]))
                 self.displayTree(self.model)
             else:
-                #self.displayConsole("[%s] %s" % (source, message))
+                # self.displayConsole("[%s] %s" % (source, message))
                 self.displayConsole("[%s] %s..." % (source, message[0:500]))
             self.InfoGrid.AutoSizeColumns()
             self.Refresh()
@@ -143,7 +144,7 @@ class SupervisorMainFrame(view_core.MainFrame):
         self.rectHypPong = wx.Rect(125, 250, 250, 100)
         self.rectPhyPong = wx.Rect(125, 375, 250, 100)
         self.rectPing = wx.Rect(450, 100, 300, 400)
-        #rectVM1Ping = wx.Rect(475, 125, 100, 100)
+        # rectVM1Ping = wx.Rect(475, 125, 100, 100)
         self.rectVM2Ping = wx.Rect(625, 125, 100, 100)
         self.rectHypPing = wx.Rect(475, 250, 250, 100)
         self.rectPhyPing = wx.Rect(475, 375, 250, 100)
@@ -156,46 +157,6 @@ class SupervisorMainFrame(view_core.MainFrame):
         # self.dc.DrawLine(50, 20, 300, 20)
         self.dc.SetPen(wx.Pen('red', 1))
         # Machine physique pong
-        '''
-        self.dc.DrawRoundedRectangleRect(self.rectPong, 8)
-        self.dc.DrawRoundedRectangleRect(self.rectPing, 8)
-        self.dc.SetBrush(wx.Brush("blue"))
-        self.dc.DrawRoundedRectangleRect(self.rectVM2Pong, 8)
-        self.dc.DrawLabel("AVM", self.rectVM2Pong, wx.ALIGN_CENTER)
-        if self.UVMCutConn == True:
-            self.dc.SetBrush(wx.Brush("orange"))
-            self.paintCutVM1()
-        if self.UVMInfected == True:
-            self.dc.SetBrush(wx.Brush("red"))
-            if self.UVMCleaning == True:
-                self.dc.SetBrush(wx.Brush("green"))
-        else:
-            self.dc.SetBrush(wx.Brush("green"))
-        self.dc.DrawRoundedRectangleRect(self.rectVM1Pong, 8)
-        self.dc.DrawLabel("UVM", self.rectVM1Pong, wx.ALIGN_CENTER)
-        self.dc.SetBrush(wx.Brush("white"))
-        self.dc.DrawRoundedRectangleRect(self.rectHypPong, 8)
-        self.dc.DrawLabel("Hyperviseur", self.rectHypPong, wx.ALIGN_CENTER)
-        self.dc.DrawRoundedRectangleRect(self.rectPhyPong, 8)
-        self.dc.DrawLabel("Machine physique normale", self.rectPhyPong, wx.ALIGN_CENTER)
-        self.dc.DrawLine(self.rectVM1Pong.x + self.rectVM1Pong.width/2, self.rectVM1Pong.y + self.rectVM1Pong.height,
-                         self.rectVM1Pong.x + self.rectVM1Pong.width/2, self.rectHypPong.y)
-        self.dc.DrawLine(self.rectVM2Pong.x + self.rectVM2Pong.width/2, self.rectVM2Pong.y + self.rectVM2Pong.height,
-                         self.rectVM2Pong.x + self.rectVM2Pong.width/2, self.rectHypPong.y)
-        # Machine physique ping
-        #self.dc.DrawRoundedRectangleRect(rectVM1Ping, 8)
-        #self.dc.DrawLabel("VM", rectVM1Ping, wx.ALIGN_CENTER)
-        self.dc.DrawRoundedRectangleRect(self.rectVM2Ping, 8)
-        self.dc.DrawLabel("VM", self.rectVM2Ping, wx.ALIGN_CENTER)
-        self.dc.DrawRoundedRectangleRect(self.rectHypPing, 8)
-        self.dc.DrawLabel("Hyperviseur", self.rectHypPing, wx.ALIGN_CENTER)
-        self.dc.DrawRoundedRectangleRect(self.rectPhyPing, 8)
-        self.dc.DrawLabel("Machine physique\nquarantaine", self.rectPhyPing, wx.ALIGN_CENTER)
-        #self.dc.DrawLine(rectVM1Ping.x + rectVM1Ping.width/2, rectVM1Ping.y + rectVM1Ping.height,
-        #                 rectVM1Ping.x + rectVM1Ping.width/2, rectHypPing.y)
-        self.dc.DrawLine(self.rectVM2Ping.x + self.rectVM2Ping.width/2, self.rectVM2Ping.y + self.rectVM2Ping.height,
-                         self.rectVM2Ping.x + self.rectVM2Ping.width/2, self.rectHypPing.y)
-        '''
         # draw a red rounded-rectangle
         # rect = wx.Rect(50, 50, 100, 100)
         # self.dc.DrawRoundedRectangleRect(rect, 8)
@@ -211,7 +172,7 @@ class SupervisorMainFrame(view_core.MainFrame):
         self.dc.DrawCircle(self.rectVM1Pong.x + self.rectVM1Pong.width / 2,
                            self.rectVM1Pong.y + self.rectVM1Pong.height +
                            (self.rectHypPong.y -
-                            (self.rectVM1Pong.y + self.rectVM1Pong.height)) / 2,
+                            (self.rectVM1Pong.y + self.rectVM1Pong.height))/2,
                            8)
 
     def moveRect(self, rect, x, y):

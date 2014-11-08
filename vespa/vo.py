@@ -72,18 +72,18 @@ class VO(Node):
         return self.alerts[::-1]
 
     def get_topology(self):
-        #agent_controller = self.findNode("Agent_Controller_Pox")
+        # agent_controller = self.findNode("Agent_Controller_Pox")
         # return self.sendRemote(agent_controller, "get_topology|")
         return []
 
     def get_link_stats(self):
-        #agent_controller = self.findNode("Agent_Controller_Pox")
+        # agent_controller = self.findNode("Agent_Controller_Pox")
         # return self.sendRemote(agent_controller, "get_link_stats|")
         return []
 
     def alert(self, msg):
         debug_comm_len("[%s] Received alert : %s" % (self.name, msg))
-        #debug2 = self.view_update
+        # debug2 = self.view_update
         # print "repr:" + repr(msg)
         source = msg.split("|")[1].split(">")[-2]
         message = msg.split(">")[-1]
@@ -126,7 +126,7 @@ class VO(Node):
                     (self.name, message))
         elif source == "Agent_Connections":
             if "ip_connections" in message:
-                #debug_info("Got %s" % message)
+                # debug_info("Got %s" % message)
                 args = message.split('#')
                 a = eval(args[1])
                 if len(self.ip_connections) > 0:
@@ -148,7 +148,8 @@ class VO(Node):
                     if ipobj['value'] > 100:
                         new_ddos = True
                         all_good = False
-                    elif ipobj['value'] > 20 and (time.time() - self.time_last_attack) > 30:
+                    elif (ipobj['value'] > 20 and
+                          (time.time() - self.time_last_attack) > 30):
                         all_good = False
 
                 if new_ddos and not self.under_ddos:
@@ -157,7 +158,8 @@ class VO(Node):
                         self.time_last_attack = time.time()
                         self.under_ddos = True
                         agent_bp = self.findNode("Agent_Bandwidth")
-                        #agent_controller = self.findNode("Agent_Controller_Pox")
+                        # agent_controller = self.findNode(
+                        # "Agent_Controller_Pox")
                         agent_controller = self.findNode(
                             "Agent_Controller_Floodlight")
                         mac = self.sendRemote(agent_bp, 'get_mac|')
@@ -174,7 +176,8 @@ class VO(Node):
                         self.time_last_attack = time.time()
                         self.under_ddos = False
                         agent_bp = self.findNode("Agent_Bandwidth")
-                        #agent_controller = self.findNode("Agent_Controller_Pox")
+                        # agent_controller = self.findNode(
+                        # "Agent_Controller_Pox")
                         agent_controller = self.findNode(
                             "Agent_Controller_Floodlight")
                         mac = self.sendRemote(agent_bp, 'get_mac|')

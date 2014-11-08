@@ -50,7 +50,8 @@ class Agent_AV(Agent):
         # Hypervisor sysrq
         else:
             if command == 'clean_image':
-                # conn_local = libvirt.open("qemu+ssh://" + self.agent_hy.host + "/system")
+                # conn_local = libvirt.open("qemu+ssh://" + self.agent_hy.host
+                # + "/system")
                 # dom = self.agent_hy.__get_dom_name(self.vm, conn_local)
                 # dom.sendKey(8, 10, [ 0x12, 0x42 ], 2, 0)
                 args = (8, 10, [0x12, 0x42], 2, 0)

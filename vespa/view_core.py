@@ -165,7 +165,7 @@ class MainFrame (wx.Frame):
             wx.DefaultPosition,
             wx.DefaultSize,
             wx.TAB_TRAVERSAL)
-        #self.m_notebook1.AddPage( self.GlobalViewPanel, u"Vue globale", False )
+        # self.m_notebook1.AddPage(self.GlobalViewPanel, u"Vue globale", False)
 
         gbSizer2.Add(
             self.m_notebook1, wx.GBPosition(
