@@ -26,21 +26,32 @@ Agent to wrap Gandalf's controller
 
 from logging import *
 from .node import Node
+from .agent import Agent
 import Queue
 import json
 import urllib
 import urllib2
 
 
-class Agent_Controller(Node):
+class Agent_Controller(Agent):
+    """Create an Agent to send a mac address to an OpenFlow controller
+
+    :return: The Agent instance to offer the OpenFlow alert_ip function
+    """
 
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = "12.0.0.3"
+        self.controller_port = 80
         super(Agent_Controller, self,).__init__(name, host, port, master, run)
         self.backend = self.desc()
 
     def alert_ip(self, ip, mac):
-        url = 'http://%s/' % self.controller_ip
+        """Block the mac address on the network
+
+        :param str ip: The IP address or domain of the controller
+        :param str mac: The mac address to block on the network
+        """
+        url = 'http://%s:%s/' % (self.controller_ip, self.controller_port)
         values = {'mac': mac}
         data = urllib.urlencode(values)
         print '!!!!!!!!!!!!!!!!!!!!! Sending mac %s to %s' % (mac, url)
