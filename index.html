@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Vespa-core : Vespa is a IaaS cloud security framework. It is based on security automation.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Vespa-core</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Orange-OpenSource/vespa-core">View on GitHub</a>
+
+          <h1 id="project_title">Vespa-core</h1>
+          <h2 id="project_tagline">Vespa is a IaaS cloud security framework. It is based on security automation.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Orange-OpenSource/vespa-core/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Orange-OpenSource/vespa-core/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a id="synopsis" class="anchor" href="#synopsis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Synopsis</h2>
+
+<p>This project is the core of the VESPA framework. It can enable communications between heterogeneous components.</p>
+
+<p><a href="https://travis-ci.org/Orange-OpenSource/vespa-core"><img src="https://travis-ci.org/Orange-OpenSource/vespa-core.svg?branch=master" alt="Build Status"></a> <a href="http://vespa-core.readthedocs.org/en/latest/"><img src="https://readthedocs.org/projects/vespa-core/badge/?version=latest" alt="Build Status"></a> <a href="https://coveralls.io/r/Orange-OpenSource/vespa-core"><img src="https://img.shields.io/coveralls/Orange-OpenSource/vespa-core.svg" alt="Coverage Status"></a></p>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
+
+<p>The tutorial (branch tutorial) delivers the basic of agent implementation and how to manage alerts on the Vertical Orchestrator.</p>
+
+<h2>
+<a id="code-example" class="anchor" href="#code-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Code Example</h2>
+
+<p>The politics are defined as Finite State Machine in Python. It enables easy parametrization and comprehensive view of autonomic loops. The <code>alert</code> function is the main component of the orchestration.</p>
+
+<p>Agent nodes are linked to security components, such as firewalls and anti-viruses, and mediate vendor lock-ins with the framework orchestration APIs. The functions are exported to other nodes and can be called automatically. The <code>sendRemote</code> function is a primitive to communicate with other nodes.</p>
+
+<h2>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Motivation</h2>
+
+<p>The VESPA framework aims at giving the building block for an autonomic security on cloud computing environments.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Grab the core files of the project with the following commands:</p>
+
+<div class="highlight highlight-bash"><pre>git clone https://github.com/Orange-OpenSource/vespa-core
+<span class="nf">cd</span> vespa-core</pre></div>
+
+<p>A convenient way to start is to follow the tutorial (branch tutorial) and setup a local environment.</p>
+
+<h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p>The <a href="http://vespa-core.readthedocs.org/en/latest/">documentation</a> is available on readthedocs.org.</p>
+
+<p>The API of nodes is described into the code as docstrings. It can be built to another format using the following command in the root directory :</p>
+
+<div class="highlight highlight-bash"><pre>sphinx-apidoc2 -F -o docs vespa</pre></div>
+
+<h2>
+<a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h2>
+
+<p>Numerous unit tests are defined to test various code functionality. You can run the test suite with the following commands in the root directory :</p>
+
+<div class="highlight highlight-bash"><pre>python2 setup.py <span class="nf">test</span></pre></div>
+
+<p>or</p>
+
+<div class="highlight highlight-bash"><pre>py.test2</pre></div>
+
+<h2>
+<a id="contributors" class="anchor" href="#contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributors</h2>
+
+<p>Aurélien Wailly, Marc Lacoste, Kévin Grandemange, Aymerik Tabourin.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>The code is released as LGPL v2.1, and contains some external code under MIT license.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Vespa-core maintained by <a href="https://github.com/Orange-OpenSource">Orange-OpenSource</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
