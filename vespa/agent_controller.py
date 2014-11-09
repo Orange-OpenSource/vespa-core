@@ -26,21 +26,23 @@ Agent to wrap Gandalf's controller
 
 from logging import *
 from .node import Node
+from .agent import Agent
 import Queue
 import json
 import urllib
 import urllib2
 
 
-class Agent_Controller(Node):
+class Agent_Controller(Agent):
 
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = "12.0.0.3"
+        self.controller_port = 80
         super(Agent_Controller, self,).__init__(name, host, port, master, run)
         self.backend = self.desc()
 
     def alert_ip(self, ip, mac):
-        url = 'http://%s/' % self.controller_ip
+        url = 'http://%s:%s/' % (self.controller_ip, self.controller_port)
         values = {'mac': mac}
         data = urllib.urlencode(values)
         print '!!!!!!!!!!!!!!!!!!!!! Sending mac %s to %s' % (mac, url)
