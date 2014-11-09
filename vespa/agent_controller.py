@@ -34,6 +34,10 @@ import urllib2
 
 
 class Agent_Controller(Agent):
+    """Create an Agent to send a mac address to an OpenFlow controller
+
+    :return: The Agent instance to offer the OpenFlow alert_ip function
+    """
 
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = "12.0.0.3"
@@ -42,6 +46,11 @@ class Agent_Controller(Agent):
         self.backend = self.desc()
 
     def alert_ip(self, ip, mac):
+        """Block the mac address on the network
+
+        :param str ip: The IP address or domain of the controller
+        :param str mac: The mac address to block on the network
+        """
         url = 'http://%s:%s/' % (self.controller_ip, self.controller_port)
         values = {'mac': mac}
         data = urllib.urlencode(values)
