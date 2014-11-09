@@ -20,9 +20,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with VESPA.  If not, see <http://www.gnu.org/licenses/>.
 """
-Most basic inherited class for a simple Node
-
-Default config without backend
+Agent wrapper around /proc/dev/net to filter an interface statistics. The
+interface *eth0* is used as default.
 """
 
 import socket
