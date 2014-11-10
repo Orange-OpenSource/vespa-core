@@ -21,7 +21,7 @@
 # along with VESPA.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Available for domains:
-# 
+#
 # d.ID                  d.injectNMI                  d.resume
 # d.OSType              d.interfaceParameters        d.revertToSnapshot
 # d.UUID                d.interfaceStats             d.save
@@ -44,7 +44,7 @@
 # d.blockResize         d.migrate3                   d.setMetadata
 # d.blockStats          d.migrateGetCompressionCache d.setNumaParameters
 # d.blockStatsFlags     d.migrateGetMaxSpeed         d.setSchedulerParameters
-# d.connect            d.migrateSetCompressionCache d.setSchedulerParametersFlags
+# d.connec           d.migrateSetCompressionCache d.setSchedulerParametersFlags
 # d.controlInfo         d.migrateSetMaxDowntime      d.setVcpus
 # d.coreDump            d.migrateSetMaxSpeed         d.setVcpusFlags
 # d.create              d.migrateToURI               d.shutdown

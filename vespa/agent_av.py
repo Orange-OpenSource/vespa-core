@@ -28,7 +28,7 @@ from .agent import Agent
 
 
 class Agent_AV(Agent):
-    """Create an Agent able to communicate with the ClamAV backend (need a 
+    """Create an Agent able to communicate with the ClamAV backend (need a
     driver).
 
     :return: The Agent instance to offer the ClamAV support
@@ -42,6 +42,13 @@ class Agent_AV(Agent):
         self.backend = vm
 
     def send(self, msg):
+        """Overload the internal send to capture and send messages to the
+        backend
+
+        :param str msg: The massage to process and to send
+        :return: The backend response
+        :rtype: str
+        """
         command = msg.split("|")[0]
         # Preprocessing
         if command == 'import_list':
@@ -99,9 +106,15 @@ class Agent_AV(Agent):
             debug1("[-] Error: %s" % (e))
 
     def isolate_warning(self, vm):
+        """Set up the agent for interactions with the hypervisor
+
+        :param str vm: The tuple (name, host, port) describing the backend
+        """
         self.is_backend_reachable = False
         self.agent_hy = eval(vm)
 
     def connect_warning(self):
+        """Set up the agent for interactions with the VM
+        """
         self.is_backend_reachable = True
         self.agent_hy = False
