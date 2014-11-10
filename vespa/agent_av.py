@@ -78,6 +78,11 @@ class Agent_AV(Agent):
         return data
 
     def dump_analyzed_file_list(self):
+        """Gather list of files analyzed bi the ClamAV antivirus
+
+        :return: The list of analyzed files
+        :rtype: list
+        """
         try:
             agent_vm = self  # self.findAgent('agent_av')
             raw_msg = agent_vm.send("dump_list|")[0]
