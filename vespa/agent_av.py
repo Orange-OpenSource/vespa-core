@@ -28,6 +28,12 @@ from .agent import Agent
 
 
 class Agent_AV(Agent):
+    """Create an Agent able to communicate with the ClamAV backend (need a 
+    driver).
+
+    :return: The Agent instance to offer the ClamAV support
+    :rtype: Node
+    """
 
     def __init__(self, name, host, port, master, vm):
         super(Agent_AV, self).__init__(name, host, port, master)

@@ -31,7 +31,7 @@ def serve_data():
 
 @pytest.fixture(scope='module')
 def agent_instance():
-    a = Agent_Controller('testnode', "127.0.0.1", 1337, None, run=False)
+    a = Agent_Controller('testnode', "127.0.0.1", 1340, None, run=False)
     s = serve_data()
     return a
 

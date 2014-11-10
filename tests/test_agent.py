@@ -12,7 +12,7 @@ from vespa.agent import Agent
 
 class TestInit(unittest.TestCase):
     def test_instance_agent(self):
-        v = Agent('testnode', "127.0.0.1", 1337, None, run=False)
+        v = Agent('testnode', "127.0.0.1", 1339, None, run=False)
         self.assertTrue(isinstance(v, Node))
 
 if __name__ == '__main__':
