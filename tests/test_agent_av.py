@@ -14,10 +14,14 @@ from vespa.node import Node
 from vespa.agent import Agent
 from vespa.agent_av import Agent_AV
 
+TEST_ARG1 = 'aloha:kikoo:lala'
+TEST_STRING = 'hello|ola:alo|%s\\r%s' % (TEST_ARG1, TEST_ARG1)
+
+
 class SimpleRequestHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         data = self.request.recv(102400) # token receive
-        self.request.send("'hello|ola:alo|aloha:kikoo:lala'EndOfTransmission")
+        self.request.send("'%s'EndOfTransmission" % TEST_STRING)
         time.sleep(0.1) # make sure it finishes receiving request before closing
         self.request.close()
 
@@ -59,18 +63,18 @@ def test_agent_av_connect_warning(agent_instance):
 def test_agent_av_send_import(agent_instance, serve_http):
     agent_instance.connect_warning()
     msg = "import_list|coucou#coucou2"
-    assert "hello|ola:alo|aloha:kikoo:lala" == agent_instance.send(msg)
+    assert TEST_STRING.replace('\\r', '\r') == agent_instance.send(msg)
 
 def test_agent_av_send_register(agent_instance, serve_http):
     agent_instance.connect_warning()
     msg = "register_handler|coucou#coucou2"
-    assert "hello|ola:alo|aloha:kikoo:lala" == agent_instance.send(msg)
+    assert TEST_STRING.replace('\\r', '\r') == agent_instance.send(msg)
 
 def test_agent_av_send_clean(agent_instance, serve_http):
     vm = '("test_vm", "127.0.0.1", 18081)'
     agent_instance.isolate_warning(vm)
     msg = "clean_image|"
-    assert "'hello|ola:alo|aloha:kikoo:lala'" == agent_instance.send(msg)
+    assert "'%s'" % TEST_STRING == agent_instance.send(msg)
 
 def test_agent_av_send_no_backend(agent_instance):
     vm = '("test_vm", "127.0.0.1", 18081)'
@@ -80,8 +84,8 @@ def test_agent_av_send_no_backend(agent_instance):
 
 def test_agent_av_dump(agent_instance, serve_http):
     agent_instance.connect_warning()
-    assert ['aloha:kikoo:lala'] == agent_instance.dump_analyzed_file_list()
-
+    assert ([('ola', 'alo'), ('aloha:kikoo', 'lala'), ('aloha:kikoo', 'lala')]
+            == agent_instance.dump_analyzed_file_list())
 
 if __name__ == '__main__':
     unittest.main()

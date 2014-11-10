@@ -56,7 +56,7 @@ class Agent_AV(Agent):
         command = msg.split("|")[0]
         # Preprocessing
         if command == 'import_list':
-            predefined_list = []
+            predefined_list = [("lala", "lolo")]
             for item, status in predefined_list:
                 msg += item + "#"
         elif command == 'register_handler':
