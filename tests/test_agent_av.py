@@ -17,7 +17,7 @@ from vespa.agent_av import Agent_AV
 class SimpleRequestHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         data = self.request.recv(102400) # token receive
-        self.request.send("'hello'EndOfTransmission")
+        self.request.send("'hello|ola:alo|aloha:kikoo:lala'EndOfTransmission")
         time.sleep(0.1) # make sure it finishes receiving request before closing
         self.request.close()
 
@@ -25,7 +25,7 @@ def serve_data():
     SocketServer.TCPServer.allow_reuse_address = True
     server = SocketServer.TCPServer(('127.0.0.1', 18081), SimpleRequestHandler)
     http_server_thread = threading.Thread(target=server.handle_request)
-    http_server_thread.setDaemon(True)
+    #http_server_thread.setDaemon(True)
     http_server_thread.start()
     return server
 
@@ -59,24 +59,29 @@ def test_agent_av_connect_warning(agent_instance):
 def test_agent_av_send_import(agent_instance, serve_http):
     agent_instance.connect_warning()
     msg = "import_list|coucou#coucou2"
-    assert "hello" == agent_instance.send(msg)
+    assert "hello|ola:alo|aloha:kikoo:lala" == agent_instance.send(msg)
 
 def test_agent_av_send_register(agent_instance, serve_http):
     agent_instance.connect_warning()
     msg = "register_handler|coucou#coucou2"
-    assert "hello" == agent_instance.send(msg)
+    assert "hello|ola:alo|aloha:kikoo:lala" == agent_instance.send(msg)
 
 def test_agent_av_send_clean(agent_instance, serve_http):
     vm = '("test_vm", "127.0.0.1", 18081)'
     agent_instance.isolate_warning(vm)
     msg = "clean_image|"
-    assert "'hello'" == agent_instance.send(msg)
+    assert "'hello|ola:alo|aloha:kikoo:lala'" == agent_instance.send(msg)
 
-def test_agent_av_send_no_backend(agent_instance, serve_http):
+def test_agent_av_send_no_backend(agent_instance):
     vm = '("test_vm", "127.0.0.1", 18081)'
     agent_instance.isolate_warning(vm)
     msg = "import_list|coucou#coucou2"
     assert ['help#'] == agent_instance.send(msg)
+
+def test_agent_av_dump(agent_instance, serve_http):
+    agent_instance.connect_warning()
+    assert ['aloha:kikoo:lala'] == agent_instance.dump_analyzed_file_list()
+
 
 if __name__ == '__main__':
     unittest.main()
