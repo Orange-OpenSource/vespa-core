@@ -29,6 +29,7 @@ from logging import *
 from threading import Thread
 import subprocess
 from .node import Node
+from .agent import Agent
 import Queue
 import fcntl
 import socket
@@ -40,7 +41,7 @@ LIST_ITEM_SEPARATOR = ':'
 LIST_SEPARATOR = '\r'
 
 
-class Agent_Bandwidth(Node):
+class Agent_Bandwidth(Agent):
 
     def __init__(self, name, host, port, master, run=True):
         # self.proc = None
@@ -53,7 +54,7 @@ class Agent_Bandwidth(Node):
         import time
 
         while not self.quitting:
-            infos = self.__get_ifaces()
+            infos = self._get_ifaces()
             tm = time.time()
 
             r = infos[self.iface]['recv_bytes']
@@ -68,7 +69,7 @@ class Agent_Bandwidth(Node):
 
             time.sleep(1)
 
-    def __get_ifaces(self):
+    def _get_ifaces(self):
         lines = open(self.devfile, "r").readlines()
 
         columnLine = lines[1]
@@ -89,9 +90,9 @@ class Agent_Bandwidth(Node):
         return faces
 
     def get_mac(self):
-        return self.__get_mac(self.iface)
+        return self._get_mac(self.iface)
 
-    def __get_mac(self, ifname):
+    def _get_mac(self, ifname):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         info = fcntl.ioctl(
             s.fileno(),
