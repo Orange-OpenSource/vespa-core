@@ -42,6 +42,12 @@ LIST_SEPARATOR = '\r'
 
 
 class Agent_Bandwidth(Agent):
+    """Provide a wrapper around Linux interfaces /proc files. The Agent can
+    extract information of specific interfaces, i.e. eth0 or lo.
+
+    :return: The agent to grab informations
+    :rtype: Node
+    """
 
     def __init__(self, name, host, port, master, run=True):
         # self.proc = None
@@ -51,6 +57,10 @@ class Agent_Bandwidth(Agent):
         self.backend = self.desc()
 
     def launch(self):
+        """Send _recv_bytes_ and _trans_bytes_ back to the master every
+        second
+        """
+
         import time
 
         while not self.quitting:
@@ -70,6 +80,12 @@ class Agent_Bandwidth(Agent):
             time.sleep(1)
 
     def _get_ifaces(self):
+        """Function parsing the /proc/net/dev file and feeding a table
+
+        :return: The table mapping the device file
+        :rtype: list
+        """
+
         lines = open(self.devfile, "r").readlines()
 
         columnLine = lines[1]
@@ -90,9 +106,21 @@ class Agent_Bandwidth(Agent):
         return faces
 
     def get_mac(self):
+        """Grab the mac address of the class defined _self.iface_
+
+        :return: The string containing the mac address, colon separated
+        :rtype: str
+        """
+
         return self._get_mac(self.iface)
 
     def _get_mac(self, ifname):
+        """Send an ioctl to recover the mac address of a specific interface
+
+        :return: The string containing the mac address, colon separated
+        :rtype: str
+        """
+
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         info = fcntl.ioctl(
             s.fileno(),
