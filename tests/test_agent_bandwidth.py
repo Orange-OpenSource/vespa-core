@@ -57,6 +57,7 @@ def test_get_ifaces(agent_instance):
     assert "recv_bytes" in agent_instance._get_ifaces()['lo']
 
 def test_get_mac(agent_instance):
+    agent_instance.iface = 'lo'
     assert len(agent_instance.get_mac().split(':')) == 6
 
 if __name__ == '__main__':
