@@ -52,6 +52,7 @@ class TestFindNodeModel(unittest.TestCase):
             m.findNode("XXX")
         m.destroy()
         time.sleep(1)
+        print "Finished"
 
 
 @pytest.fixture(scope='module')

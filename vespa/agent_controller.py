@@ -37,6 +37,7 @@ class Agent_Controller(Agent):
     """Create an Agent to send a mac address to an OpenFlow controller
 
     :return: The Agent instance to offer the OpenFlow alert_ip function
+    :rtype: Node
     """
 
     def __init__(self, name, host, port, master, run=False):
@@ -50,6 +51,8 @@ class Agent_Controller(Agent):
 
         :param str ip: The IP address or domain of the controller
         :param str mac: The mac address to block on the network
+        :return: The "Ok" string
+        :rtype: str
         """
         url = 'http://%s:%s/' % (self.controller_ip, self.controller_port)
         values = {'mac': mac}

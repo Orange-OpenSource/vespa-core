@@ -26,20 +26,37 @@ import socket
 from .log_pipe import debug1
 from .agent import Agent
 
+EOT_FLAG = "EndOfTransmission"
+LIST_ITEM_SEPARATOR = ':'
+LIST_SEPARATOR = '\r'
+
 
 class Agent_AV(Agent):
+    """Create an Agent able to communicate with the ClamAV backend (need a
+    driver).
+
+    :return: The Agent instance to offer the ClamAV support
+    :rtype: Node
+    """
 
     def __init__(self, name, host, port, master, vm):
-        super(Agent_AV, self).__init__(name, host, port, master)
+        super(Agent_AV, self).__init__(name, host, port, master, run=False)
         self.have_backend = True
         self.is_backend_reachable = True
         self.backend = vm
 
     def send(self, msg):
+        """Overload the internal send to capture and send messages to the
+        backend
+
+        :param str msg: The massage to process and to send
+        :return: The backend response
+        :rtype: str
+        """
         command = msg.split("|")[0]
         # Preprocessing
         if command == 'import_list':
-            predefined_list = []
+            predefined_list = [("lala", "lolo")]
             for item, status in predefined_list:
                 msg += item + "#"
         elif command == 'register_handler':
@@ -65,9 +82,14 @@ class Agent_AV(Agent):
         return data
 
     def dump_analyzed_file_list(self):
+        """Gather list of files analyzed bi the ClamAV antivirus
+
+        :return: The list of analyzed files
+        :rtype: list
+        """
         try:
             agent_vm = self  # self.findAgent('agent_av')
-            raw_msg = agent_vm.send("dump_list|")[0]
+            raw_msg = agent_vm.send("dump_list|")
             command = raw_msg.split('|')[0]
             title_list = raw_msg.split('|')[1]
             file_list_raw = raw_msg.split('|')[2]
@@ -89,13 +111,19 @@ class Agent_AV(Agent):
                 status = scan_result.split(LIST_ITEM_SEPARATOR)[2].strip()
                 file_list.append((name, status))
             return file_list
-        except Exception as e:
+        except ImportError as e:
             debug1("[-] Error: %s" % (e))
 
     def isolate_warning(self, vm):
+        """Set up the agent for interactions with the hypervisor
+
+        :param str vm: The tuple (name, host, port) describing the backend
+        """
         self.is_backend_reachable = False
         self.agent_hy = eval(vm)
 
     def connect_warning(self):
+        """Set up the agent for interactions with the VM
+        """
         self.is_backend_reachable = True
         self.agent_hy = False
