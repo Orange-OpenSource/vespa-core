@@ -25,12 +25,14 @@ Agent to wrap Gandalf's controller
 """
 
 from logging import *
-from .node import Node
+from .agent_controller import Agent_Controller
 import Queue
 import urllib2
+import json
+import random
 
 
-class Agent_Controller_Floodlight(Node):
+class Agent_Controller_Floodlight(Agent_Controller):
 
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = "12.0.0.20:9999"
@@ -60,19 +62,19 @@ class Agent_Controller_Floodlight(Node):
         return the_page
 
     def alert_ip(self, ip, mac):
-        self.block_hackers(mac)
+        return self.block_hackers(mac)
 
     def status_hackers(self):
-        self._send_controller('status_hackers')
+        return self._send_controller('status_hackers')
 
     def release_hackers(self):
-        self._send_controller('release_hackers')
+        return self._send_controller('release_hackers')
 
     def block_hackers(self, mac):
-        self._send_controller('?mac=%s' % mac)
+        return self._send_controller('?mac=%s' % mac)
 
     def get_topology(self, cmd='wm/topology/switchclusters/json'):
-        topo = self._send_controller_res(cmd)
+        topo = self._send_controller(cmd)
         jt = json.loads(topo)
 
         nodes = []
@@ -96,5 +98,5 @@ class Agent_Controller_Floodlight(Node):
         return {'links': edges, 'nodes': nodes}
 
     def get_link_stats(self, cmd='wm/topology/links/json'):
-        links = self._send_controller_res(cmd)
+        links = self._send_controller(cmd)
         return links
