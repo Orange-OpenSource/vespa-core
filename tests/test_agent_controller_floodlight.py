@@ -16,7 +16,15 @@ from vespa.agent_controller import Agent_Controller
 from vespa.agent_controller_floodlight import Agent_Controller_Floodlight
 
 
-EX_JSON = '[{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":5,"src-port-state":0,"dst-switch":"00:00:00:1a:1e:15:97:00","dst-port":49,"dst-port-state":0,"type":"internal"},{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":11,"src-port-state":0,"dst-switch":"00:00:00:1a:1e:0d:47:80","dst-port":26,"dst-port-state":0,"type":"internal"},{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":9,"src-port-state":0,"dst-switch":"00:00:00:1a:1e:0d:91:c0","dst-port":26,"dst-port-state":0,"type":"internal"}]'
+EX_JSON = '''[{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":5,
+"src-port-state":0,"dst-switch":"00:00:00:1a:1e:15:97:00",
+"dst-port":49,"dst-port-state":0,"type":"internal"},
+{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":11,
+"src-port-state":0,"dst-switch":"00:00:00:1a:1e:0d:47:80",
+"dst-port":26,"dst-port-state":0,"type":"internal"},
+{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":9,
+"src-port-state":0,"dst-switch":"00:00:00:1a:1e:0d:91:c0",
+"dst-port":26,"dst-port-state":0,"type":"internal"}]'''
 
 class SimpleRequestHandler(SocketServer.BaseRequestHandler):
     def handle(self):
@@ -66,7 +74,15 @@ def test_block_hackers(agent_instance, serve_http):
     assert agent_instance.block_hackers('11:22:33:44:55:66') == EX_JSON 
 
 def test_get_topology(agent_instance, serve_http):
-    expected = {'nodes': [{'id': u'00:00:00:1c:73:19:bd:d0'}, {'id': u'00:00:00:1a:1e:15:97:00'}, {'id': u'00:00:00:1c:73:19:bd:d0'}, {'id': u'00:00:00:1a:1e:0d:47:80'}, {'id': u'00:00:00:1c:73:19:bd:d0'}, {'id': u'00:00:00:1a:1e:0d:91:c0'}], 'links': [{'source': 0, 'target': 1, 'value': 177}, {'source': 0, 'target': 3, 'value': 78}, {'source': 0, 'target': 5, 'value': 196}]}
+    expected = {'nodes': [{'id': u'00:00:00:1c:73:19:bd:d0'},
+                          {'id': u'00:00:00:1a:1e:15:97:00'},
+                          {'id': u'00:00:00:1c:73:19:bd:d0'},
+                          {'id': u'00:00:00:1a:1e:0d:47:80'},
+                          {'id': u'00:00:00:1c:73:19:bd:d0'},
+                          {'id': u'00:00:00:1a:1e:0d:91:c0'}],
+                'links': [{'source': 0, 'target': 1, 'value': 177},
+                          {'source': 0, 'target': 3, 'value': 78},
+                          {'source': 0, 'target': 5, 'value': 196}]}
     gt = agent_instance.get_topology()
     s1 = [ s["source"] for s in [ i for i in gt['links']]]
     s2 = [ s["source"] for s in [ i for i in expected['links']]]
