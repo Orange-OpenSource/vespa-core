@@ -56,6 +56,9 @@ def test_agent_controller_instance(agent_instance):
 def test_alert_ip(agent_instance, serve_http):
     assert agent_instance.alert_ip('10.0.0.4', '11:22:33:44:55:66') == "Ok"
 
+def test_alert_ip_bug(agent_instance):
+    assert agent_instance.alert_ip('10.0.0.4', '11:22:33:44:55:66') == "Ok"
+
 def test_status_hackers(agent_instance, serve_http):
     assert agent_instance.status_hackers() == "Ok"
 
