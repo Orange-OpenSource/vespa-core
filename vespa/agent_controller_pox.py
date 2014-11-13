@@ -57,7 +57,7 @@ class Agent_Controller_Pox(Agent_Controller):
 
     def _send_controller(self, cmd):
         host = self.controller_ip  # '10.193.163.27' # p-rambo
-        port = self.controller_port # 7790
+        port = self.controller_port  # 7790
 
         try:
             sock = socket.socket()
