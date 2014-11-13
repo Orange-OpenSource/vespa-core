@@ -62,16 +62,19 @@ def test_agent_controller_instance(agent_instance):
     assert isinstance(agent_instance, Agent_Controller)
 
 def test_alert_ip(agent_instance, serve_http):
-    assert agent_instance.alert_ip('10.0.0.4', '11:22:33:44:55:66') == EX_JSON 
+    assert agent_instance.alert_ip('10.0.0.4', '11:22:33:44:55:66') == EX_JSON
+
+def test_send_floodlight(agent_instance, serve_http):
+    assert agent_instance._send_floodlight('kikoo') == EX_JSON
 
 def test_status_hackers(agent_instance, serve_http):
-    assert agent_instance.status_hackers() == EX_JSON 
+    assert agent_instance.status_hackers() == EX_JSON
 
 def test_release_hackers(agent_instance, serve_http):
-    assert agent_instance.release_hackers() == EX_JSON 
+    assert agent_instance.release_hackers() == EX_JSON
 
 def test_block_hackers(agent_instance, serve_http):
-    assert agent_instance.block_hackers('11:22:33:44:55:66') == EX_JSON 
+    assert agent_instance.block_hackers('11:22:33:44:55:66') == EX_JSON
 
 def test_get_topology(agent_instance, serve_http):
     expected = {'nodes': [{'id': u'00:00:00:1c:73:19:bd:d0'},
