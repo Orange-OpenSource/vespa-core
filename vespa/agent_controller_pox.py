@@ -38,7 +38,7 @@ import argparse
 mychannel = 'mac_redir'
 
 
-class Agent_Controller_Pox(Node):
+class Agent_Controller_Pox(Agent):
 
     def __init__(self, name, host, port, master, run=False):
         self.controller_ip = '10.193.163.27'
@@ -117,16 +117,16 @@ class Agent_Controller_Pox(Node):
         return json.loads(d)
 
     def alert_ip(self, ip, mac):
-        self.block_hackers()
+        return self.block_hackers()
 
     def status_hackers(self):
-        self._send_controller('status_hackers')
+        return self._send_controller('status_hackers')
 
     def release_hackers(self):
-        self._send_controller('release_hackers')
+        return self._send_controller('release_hackers')
 
     def block_hackers(self):
-        self._send_controller('block_hackers')
+        return self._send_controller('block_hackers')
 
     def get_topology(self, cmd='get_topology'):
         return self._send_controller_res(cmd)
