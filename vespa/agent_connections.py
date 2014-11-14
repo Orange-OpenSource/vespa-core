@@ -45,6 +45,12 @@ LIST_SEPARATOR = '\r'
 
 
 class Agent_Connections(Agent):
+    """An agent gathering network links through psutil python module or
+    system lsof command
+
+    :return: The wrapper
+    :rtype: Node
+    """
 
     def __init__(self, name, host, port, master, run=True):
         # self.proc = None
@@ -53,6 +59,9 @@ class Agent_Connections(Agent):
         self.daemonname = "vlc"
 
     def launch(self):
+        """Return network connections to orchestrator layer every second using
+        either psutil or lsof
+        """
         import time
 
         while not self.quitting:
@@ -87,6 +96,11 @@ class Agent_Connections(Agent):
             time.sleep(1)
 
     def _get_conns(self):
+        """Gather psutil connections
+
+        :return: List of network links
+        :rtype: list
+        """
         res = []
         for p in psutil.process_iter():
             try:
@@ -96,6 +110,11 @@ class Agent_Connections(Agent):
         return res
 
     def _get_conns_lsof(self):
+        """Gather network connections with lsof
+
+        :return: Dict of network links
+        :rtype: dict
+        """
         lines = os.popen('lsof -ni').readlines()
 
         from subprocess import Popen, PIPE
