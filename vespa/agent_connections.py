@@ -33,6 +33,7 @@ from .log_pipe import *
 from threading import Thread
 import subprocess
 from .node import Node
+from .agent import Agent
 import Queue
 import os
 import psutil
@@ -43,7 +44,7 @@ LIST_ITEM_SEPARATOR = ':'
 LIST_SEPARATOR = '\r'
 
 
-class Agent_Connections(Node):
+class Agent_Connections(Agent):
 
     def __init__(self, name, host, port, master, run=True):
         # self.proc = None
@@ -85,7 +86,7 @@ class Agent_Connections(Node):
 
             time.sleep(1)
 
-    def __get_conns(self):
+    def _get_conns(self):
         res = []
         for p in psutil.process_iter():
             try:
@@ -94,7 +95,7 @@ class Agent_Connections(Node):
                 continue
         return res
 
-    def __get_conns_lsof(self):
+    def _get_conns_lsof(self):
         lines = os.popen('lsof -ni').readlines()
 
         from subprocess import Popen, PIPE
