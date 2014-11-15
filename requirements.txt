@@ -1,3 +1,4 @@
 configobj
 pycrypto
 psutil
+libvirt-python
