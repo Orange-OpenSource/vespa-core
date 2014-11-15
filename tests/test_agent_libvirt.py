@@ -69,30 +69,36 @@ def test_agent_libvirt__get_dom_name(agent_instance):
         agent_instance._get_dom_name("nodename", agent_instance)
 
 def test_agent_libvirt_cut_link(agent_instance, serve_http):
-    assert agent_instance.cut_link() == True
+    with pytest.raises(libvirt.libvirtError):
+        agent_instance.cut_link()
 
-def test_agent_libvirt_connect_link(agent_instance):
-    assert agent_instance.connect_link() == True
+def test_agent_libvirt_connect_link(agent_instance, serve_http):
+    with pytest.raises(libvirt.libvirtError):
+        agent_instance.connect_link()
 
-def test_agent_libvirt_migrate(agent_instance):
-    assert agent_instance.migrate("nodename", "test", "test") == True
+def test_agent_libvirt_migrate(agent_instance, serve_http):
+    with pytest.raises(libvirt.libvirtError):
+        agent_instance.migrate("nodename", "test", "test")
 
-def test_agent_libvirt_contains_vm(agent_instance):
+def test_agent_libvirt_contains_vm(agent_instance, serve_http):
     vm = True
-    assert agent_instance.contains_vm(vm) == True
+    assert agent_instance.contains_vm(vm) == False
 
-def test_agent_libvirt_send_key(agent_instance):
+def test_agent_libvirt_send_key(agent_instance, serve_http):
     vm = True
     key = True
-    assert agent_instance.send_key(vm, key) == True
+    with pytest.raises(libvirt.libvirtError):
+        agent_instance.send_key(vm, key)
 
-def test_agent_libvirt_restart(agent_instance):
+def test_agent_libvirt_restart(agent_instance, serve_http):
     vm = True
-    assert agent_instance.restart(vm) == True
+    with pytest.raises(libvirt.libvirtError):
+        agent_instance.restart(vm)
 
-def test_agent_libvirt_restart_hard(agent_instance):
+def test_agent_libvirt_restart_hard(agent_instance, serve_http):
     vm = True
-    assert agent_instance.restart_hard(vm) == True
+    with pytest.raises(libvirt.libvirtError):
+        agent_instance.restart_hard(vm)
 
 
 if __name__ == '__main__':

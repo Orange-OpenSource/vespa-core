@@ -125,12 +125,6 @@ class Agent_Libvirt(Agent):
         import os
         import time
         import xml.dom.minidom
-        # conn_local = libvirt.open(
-        #     "qemu+ssh://" +
-        #     self.libvirt_user +
-        #     "@" +
-        #     self.libvirt_host +
-        #     "/system")
         conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
                                   (self.libvirt_user,
                                    self.libvirt_host,
@@ -165,12 +159,10 @@ class Agent_Libvirt(Agent):
         import os
         import time
         import xml.dom.minidom
-        conn_local = libvirt.open(
-            "qemu+ssh://" +
-            self.libvirt_user +
-            "@" +
-            self.libvirt_host +
-            "/system")
+        conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
+                                  (self.libvirt_user,
+                                   self.libvirt_host,
+                                   self.libvirt_port))
 
         domNode = self._get_dom_name(nodeName, conn_local)
 
@@ -202,12 +194,10 @@ class Agent_Libvirt(Agent):
         import os
         import time
         import xml.dom.minidom
-        conn_local = libvirt.open(
-            "qemu+ssh://" +
-            self.libvirt_user +
-            "@" +
-            self.libvirt_host +
-            "/system")
+        conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
+                                  (self.libvirt_user,
+                                   self.libvirt_host,
+                                   self.libvirt_port))
         conn_quarantine = libvirt.open(
             "qemu+ssh://" +
             quarantine_user +
@@ -230,12 +220,10 @@ class Agent_Libvirt(Agent):
         import time
         import xml.dom.minidom
         try:
-            conn_local = libvirt.open(
-                "qemu+ssh://" +
-                self.libvirt_user +
-                "@" +
-                self.libvirt_host +
-                "/system")
+            conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
+                                      (self.libvirt_user,
+                                       self.libvirt_host,
+                                       self.libvirt_port))
             self._get_dom_name(vm, conn_local)
             return True
         except Exception:
@@ -247,12 +235,10 @@ class Agent_Libvirt(Agent):
         import os
         import time
         import xml.dom.minidom
-        conn_local = libvirt.open(
-            "qemu+ssh://" +
-            self.libvirt_user +
-            "@" +
-            self.libvirt_host +
-            "/system")
+        conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
+                                  (self.libvirt_user,
+                                   self.libvirt_host,
+                                   self.libvirt_port))
         wokeup = False
         debug1(
             self.name + ">Waiting for vm %s to wake up on %s" %
@@ -275,13 +261,10 @@ class Agent_Libvirt(Agent):
         import os
         import time
         import xml.dom.minidom
-
-        conn_local = libvirt.open(
-            "qemu+ssh://" +
-            self.libvirt_user +
-            "@" +
-            self.libvirt_host +
-            "/system")
+        conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
+                                  (self.libvirt_user,
+                                   self.libvirt_host,
+                                   self.libvirt_port))
         vm_name, vm_host, vm_port = eval(vm)
         dom = self._get_dom_name(vm_name, conn_local)
         dom.create()
@@ -293,13 +276,10 @@ class Agent_Libvirt(Agent):
         import os
         import time
         import xml.dom.minidom
-
-        conn_local = libvirt.open(
-            "qemu+ssh://" +
-            self.libvirt_user +
-            "@" +
-            self.libvirt_host +
-            "/system")
+        conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
+                                  (self.libvirt_user,
+                                   self.libvirt_host,
+                                   self.libvirt_port))
         vm_name, vm_host, vm_port = eval(vm)
         dom = self._get_dom_name(vm_name, conn_local)
         try:
