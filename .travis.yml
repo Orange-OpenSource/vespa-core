@@ -7,6 +7,7 @@ branches:
     - master
     - tutorial
 install:
+  - sudo apt-get install -qq python-libvirt
   - pip install -r requirements.txt --use-mirrors
   - pip install pep8
   - pip install coverage
