@@ -16,16 +16,6 @@ from vespa.agent import Agent
 from vespa.agent_libvirt import Agent_Libvirt
 
 
-EX_JSON = '''[{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":5,
-"src-port-state":0,"dst-switch":"00:00:00:1a:1e:15:97:00",
-"dst-port":49,"dst-port-state":0,"type":"internal"},
-{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":11,
-"src-port-state":0,"dst-switch":"00:00:00:1a:1e:0d:47:80",
-"dst-port":26,"dst-port-state":0,"type":"internal"},
-{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":9,
-"src-port-state":0,"dst-switch":"00:00:00:1a:1e:0d:91:c0",
-"dst-port":26,"dst-port-state":0,"type":"internal"}]'''
-
 class SimpleRequestHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         data = self.request.recv(102400) # token receive
@@ -51,8 +41,7 @@ def serve_http(request):
 @pytest.fixture(scope='module')
 
 def agent_instance():
-    a = Agent_Libvirt('testnode', "127.0.0.1", 1341, None,
-                                    run=False)
+    a = Agent_Libvirt('testnode', "127.0.0.1", 1341, None, run=False)
     a.libvirt_port = 18080
     a.backend = ("libvirt", a.libvirt_host, 18080, "usertest")
     return a
