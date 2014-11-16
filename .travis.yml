@@ -6,6 +6,9 @@ branches:
   only:
     - master
     - tutorial
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install python-libvirt libvirt-dev
 install:
   - pip install -r requirements.txt --use-mirrors
   - pip install pep8
