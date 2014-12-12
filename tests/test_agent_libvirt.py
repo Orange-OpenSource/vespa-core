@@ -54,8 +54,8 @@ def test_agent_libvirt_send(agent_instance):
     assert agent_instance.send("msg_test") == ['help#']
 
 def test_agent_libvirt__get_dom_name(agent_instance):
-    with pytest.raises(Exception):
-        agent_instance._get_dom_name("nodename", agent_instance)
+    #with pytest.raises(Exception):
+    agent_instance._get_dom_name("nodename", agent_instance)
 
 def test_agent_libvirt_cut_link(agent_instance, serve_http):
     with pytest.raises(libvirt.libvirtError):
