@@ -125,12 +125,15 @@ class Agent_Libvirt(Agent):
         import os
         import time
         import xml.dom.minidom
+        print "Trying to open"
         conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
                                   (self.libvirt_user,
                                    self.libvirt_host,
                                    self.libvirt_port))
+        print "Trying to get_dom"
         domNode = self._get_dom_name(nodeName, conn_local)
 
+        print "Trying to minidom"
         parsed = xml.dom.minidom.parseString(domNode.XMLDesc(0))
         node_interface = parsed.getElementsByTagName("interface")[0]
         link_to_cut = node_interface.getElementsByTagName(
@@ -138,6 +141,7 @@ class Agent_Libvirt(Agent):
         bridge = node_interface.getElementsByTagName(
             "source")[0].getAttribute("bridge")
 
+        print "Trying to os"
         # Cutting link
         os.system(
             "ssh " +
