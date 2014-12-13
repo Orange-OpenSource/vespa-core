@@ -15,11 +15,13 @@ from vespa.node import Node
 from vespa.agent import Agent
 from vespa.agent_libvirt import Agent_Libvirt
 
+TEST_STRING = "hello"
+
 
 class SimpleRequestHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         data = self.request.recv(102400) # token receive
-        self.request.send("%s" % EX_JSON)
+        self.request.send("%s" % TEST_STRING)
         time.sleep(0.1) # make sure it finishes receiving request before closing
         self.request.close()
 
@@ -58,8 +60,8 @@ def test_agent_libvirt__get_dom_name(agent_instance):
         agent_instance._get_dom_name("nodename", agent_instance)
 
 def test_agent_libvirt_cut_link(agent_instance, serve_http):
-    #with pytest.raises(libvirt.libvirtError):
-    agent_instance.cut_link()
+    with pytest.raises(libvirt.libvirtError):
+        agent_instance.cut_link()
 
 def test_agent_libvirt_connect_link(agent_instance, serve_http):
     with pytest.raises(libvirt.libvirtError):
