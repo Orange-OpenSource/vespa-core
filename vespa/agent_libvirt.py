@@ -125,7 +125,7 @@ class Agent_Libvirt(Agent):
         import os
         import time
         import xml.dom.minidom
-        print "Trying to open"
+        print "Trying to open %s, %s, %s" % (self.libvirt_user, self.libvirt_host, self.libvirt_port)
         conn_local = libvirt.open("qemu+ssh://%s@%s:%s/system" %
                                   (self.libvirt_user,
                                    self.libvirt_host,
