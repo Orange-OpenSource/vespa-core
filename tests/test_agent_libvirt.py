@@ -16,6 +16,8 @@ from vespa.agent import Agent
 from vespa.agent_libvirt import Agent_Libvirt
 
 TEST_STRING = "hello"
+PORT = 18089
+PORT_AGENT = 1367
 
 
 class SimpleRequestHandler(SocketServer.BaseRequestHandler):
@@ -27,7 +29,7 @@ class SimpleRequestHandler(SocketServer.BaseRequestHandler):
 
 def serve_data():
     SocketServer.TCPServer.allow_reuse_address = True
-    server = SocketServer.TCPServer(('127.0.0.1', 18080), SimpleRequestHandler)
+    server = SocketServer.TCPServer(('127.0.0.1', PORT), SimpleRequestHandler)
     http_server_thread = threading.Thread(target=server.handle_request)
     http_server_thread.setDaemon(True)
     http_server_thread.start()
@@ -43,9 +45,9 @@ def serve_http(request):
 @pytest.fixture(scope='module')
 
 def agent_instance():
-    a = Agent_Libvirt('testnode', "127.0.0.1", 1341, None, run=False)
-    a.libvirt_port = 18080
-    a.backend = ("libvirt", a.libvirt_host, 18080, "usertest")
+    a = Agent_Libvirt('testnode', "127.0.0.1", PORT_AGENT, None, run=False)
+    a.libvirt_port = PORT 
+    a.backend = ("libvirt", a.libvirt_host, PORT, "usertest")
     return a
 
 

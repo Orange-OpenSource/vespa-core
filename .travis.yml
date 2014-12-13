@@ -16,6 +16,7 @@ install:
   - pip install coveralls
 script:
   - pep8 --exclude=migrations vespa
+  - py.test -s
   - coverage run --source=vespa setup.py test
 #  - py.test --cov=vespa --cov-report=term
 after_success:
