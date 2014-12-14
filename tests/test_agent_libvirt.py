@@ -42,8 +42,8 @@ def serve_http(request):
         s.server_close()
     request.addfinalizer(fin)
     return s
-@pytest.fixture(scope='module')
 
+@pytest.fixture(scope='module')
 def agent_instance():
     a = Agent_Libvirt('testnode', "127.0.0.1", PORT_AGENT, None, run=False)
     a.libvirt_port = PORT 
