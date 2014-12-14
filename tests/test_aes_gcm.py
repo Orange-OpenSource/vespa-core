@@ -54,3 +54,29 @@ def test_aes_gcm_decrypt(gcm):
     encrypted, new_tag = gcm.encrypt(init_value, plaintext, auth_data)
     decrypted = gcm.decrypt(init_value, encrypted, new_tag, auth_data)
     assert decrypted == plaintext
+
+def test_aes_gcm_change_key_bad(gcm):
+    with pytest.raises(InvalidInputException):
+        gcm.change_key(0x42 << 128)
+
+def test_aes_gcm_encrypt_bad_init(gcm):
+    with pytest.raises(InvalidInputException):
+        gcm.encrypt(0x42 << 96, b'\x42')
+
+def test_aes_gcm_encrypt_empty_plain(gcm):
+    c, a = encrypted, new_tag = gcm.encrypt(init_value, '', auth_data)
+    assert c == ''
+
+def test_aes_gcm_encrypt_init_reuse(gcm):
+    encrypted, new_tag = gcm.encrypt(init_value, plaintext, auth_data)
+    decrypted = gcm.decrypt(init_value, encrypted, new_tag, auth_data)
+    with pytest.raises(InvalidInputException):
+        encrypted, new_tag = gcm.encrypt(init_value, plaintext, auth_data)
+
+def test_aes_gcm_decrypt_bad_init(gcm):
+    with pytest.raises(InvalidInputException):
+        gcm.decrypt(0x42 << 96, 'ci', b'\x42')
+
+def test_aes_gcm_decrypt_empty_plain(gcm):
+    with pytest.raises(InvalidInputException):
+        gcm.decrypt(0x42, 'ci', 0x42 << 128)
