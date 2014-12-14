@@ -143,8 +143,11 @@ class Controller(object):
     def handler(self, signum, false):
         if signum == 2:
             debug_init("Controller received shutting down")
-            self.model.destroy()
-            exit(0)
+            self._shutdown()
+
+    def _shutdown(self):
+        self.model.destroy()
+        exit(0)
 
     def start(self):
         debug5("Started Controller")
