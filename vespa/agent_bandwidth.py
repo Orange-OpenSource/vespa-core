@@ -28,8 +28,8 @@ import socket
 from logging import *
 from threading import Thread
 import subprocess
-from .node import Node
-from .agent import Agent
+from node import Node
+from agent import Agent
 import Queue
 import fcntl
 import socket

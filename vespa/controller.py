@@ -131,14 +131,17 @@ def server_handler(c, request):
     elif request == "/get_link_stats":
         vo = c.model.slaves[0]
         return eval(c.model.sendRemote(vo, "get_link_stats|"))
+    elif request == "/destroy":
+        c._shutdown()
     else:
         return request
 
 
 class Controller(object):
-    def __init__(self, model, view):
+    def __init__(self, model, view, testmode=False):
         self.model = model
         self.view = view
+        self.testmode = testmode
 
     def handler(self, signum, false):
         if signum == 2:
@@ -152,7 +155,8 @@ class Controller(object):
     def start(self):
         debug5("Started Controller")
 
-        signal.signal(signal.SIGINT, self.handler)
+        if self.testmode == False:
+            signal.signal(signal.SIGINT, self.handler)
         server = HttpServer("test server", "0.0.0.0", 8080, server_handler,
                             self)
         server.start()
