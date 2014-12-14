@@ -30,16 +30,30 @@ from .ho import HO
 
 
 class HO_VM(HO):
+    """Create an horizontal orchestrator to handle agents at the VM level.
+
+    :return: The Horizontal Orchestrator to gather and react on VM agents.
+    :rtype: Node
+    """
 
     def __init__(self, name, host, port, master, run=True):
         super(HO_VM, self).__init__(name, host, port, master, run)
         self.have_backend = False
 
     def send(self, msg):
+        """Overload the internal send() to capture and send messages to the
+        backend
+
+        :param str msg: The massage to process and to send
+        :return: The backend response
+        :rtype: str
+        """
         data = super(HO_VM, self).send(msg)
         # debug1("%s> Sending %s to %s" % (self.name, msg, self.master) )
         # self.sendRemote( self.master, data )
         return data
 
     def ninjaMethod(self):
+        """Empty function for tests
+        """
         pass
