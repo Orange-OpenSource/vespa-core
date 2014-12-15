@@ -30,6 +30,13 @@ import time
 
 
 class VO(Node):
+    """Create a Vertical Orchestrator to interconnect all other components.
+    It may be requested by an external controller. All incoming communications
+    go through the *alert()* method, and are parsed there.
+
+    :return: The VO instance
+    :rtype: Node
+    """
 
     def __init__(self, name, host, port, master, run=True):
         self.recv_bytes = []
@@ -82,6 +89,14 @@ class VO(Node):
         return []
 
     def alert(self, msg):
+        """This is the most important function of the whole framework.
+        The format is *alert|source>...>source>message*. The message is also
+        split in the following format *function#arg1#...#argN*. The two
+        formats are used to create a Finite State Machine, each alert being
+        a state transition.
+
+        :param str msg: The massage to process with the current format
+        """
         debug_comm_len("[%s] Received alert : %s" % (self.name, msg))
         # debug2 = self.view_update
         # print "repr:" + repr(msg)
