@@ -4,14 +4,6 @@ vespa package
 Submodules
 ----------
 
-vespa.SupervisorMainFrame module
---------------------------------
-
-.. automodule:: vespa.SupervisorMainFrame
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 vespa.aes_gcm module
 --------------------
 
@@ -124,14 +116,6 @@ vespa.ho_vm module
     :undoc-members:
     :show-inheritance:
 
-vespa.horchestrator_dummy module
---------------------------------
-
-.. automodule:: vespa.horchestrator_dummy
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 vespa.log_pipe module
 ---------------------
 
@@ -164,26 +148,10 @@ vespa.starter module
     :undoc-members:
     :show-inheritance:
 
-vespa.supervisor module
------------------------
-
-.. automodule:: vespa.supervisor
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 vespa.view module
 -----------------
 
 .. automodule:: vespa.view
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vespa.view_core module
-----------------------
-
-.. automodule:: vespa.view_core
     :members:
     :undoc-members:
     :show-inheritance:
