@@ -61,6 +61,7 @@ def test_agent_libvirt__get_dom_name(agent_instance):
     with pytest.raises(Exception):
         agent_instance._get_dom_name("nodename", agent_instance)
 
+"""
 def test_agent_libvirt_cut_link(agent_instance, serve_http):
     with pytest.raises(libvirt.libvirtError):
         agent_instance.cut_link()
@@ -92,7 +93,4 @@ def test_agent_libvirt_restart_hard(agent_instance, serve_http):
     vm = True
     with pytest.raises(libvirt.libvirtError):
         agent_instance.restart_hard(vm)
-
-
-if __name__ == '__main__':
-    unittest.main()
+"""
