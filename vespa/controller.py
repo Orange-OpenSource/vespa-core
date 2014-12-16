@@ -160,6 +160,6 @@ class Controller(object):
         if not self.testmode:
             signal.signal(signal.SIGINT, self.handler)
 
-        self.server = HttpServer("test server", "0.0.0.0", 8080, server_handler,
-                            self)
+        self.server = HttpServer("test server", "0.0.0.0", 8080,
+                                 server_handler, self)
         self.server.start()
