@@ -1,5 +1,4 @@
 import pytest
-import unittest
 import sys
 import os
 import SocketServer
@@ -25,9 +24,26 @@ class SimpleRequestHandler(SocketServer.BaseRequestHandler):
         time.sleep(0.1) # make sure it finishes receiving request before closing
         self.request.close()
 
-def serve_data():
+class NoListRequestHandler(SocketServer.BaseRequestHandler):
+    def handle(self):
+        data = self.request.recv(102400) # token receive
+        self.request.send("'%s'EndOfTransmission" % TEST_STRING.split("\\")[0])
+        time.sleep(0.1) # make sure it finishes receiving request before closing
+        self.request.close()
+
+class NoColonRequestHandler(SocketServer.BaseRequestHandler):
+    def handle(self):
+        data = self.request.recv(102400) # token receive
+        sstr = TEST_STRING.split("|")
+        new_string = sstr[0:2] + [sstr[2].replace(":", "")]
+        new_string = "|".join(new_string)
+        self.request.send("'%s'EndOfTransmission" % new_string)
+        time.sleep(0.1) # make sure it finishes receiving request before closing
+        self.request.close()
+
+def serve_data(request_handler):
     SocketServer.TCPServer.allow_reuse_address = True
-    server = SocketServer.TCPServer(('127.0.0.1', 18081), SimpleRequestHandler)
+    server = SocketServer.TCPServer(('127.0.0.1', 18081), request_handler)
     http_server_thread = threading.Thread(target=server.handle_request)
     #http_server_thread.setDaemon(True)
     http_server_thread.start()
@@ -41,7 +57,23 @@ def agent_instance():
 
 @pytest.fixture(scope='function')
 def serve_http(request):
-    s = serve_data()
+    s = serve_data(SimpleRequestHandler)
+    def fin():
+        s.server_close()
+    request.addfinalizer(fin)
+    return s
+
+@pytest.fixture(scope='function')
+def serve_http_no_list(request):
+    s = serve_data(NoListRequestHandler)
+    def fin():
+        s.server_close()
+    request.addfinalizer(fin)
+    return s
+
+@pytest.fixture(scope='function')
+def serve_http_no_colon(request):
+    s = serve_data(NoColonRequestHandler)
     def fin():
         s.server_close()
     request.addfinalizer(fin)
@@ -87,5 +119,12 @@ def test_agent_av_dump(agent_instance, serve_http):
     assert ([('ola', 'alo'), ('aloha:kikoo', 'lala'), ('aloha:kikoo', 'lala')]
             == agent_instance.dump_analyzed_file_list())
 
-if __name__ == '__main__':
-    unittest.main()
+def test_agent_av_dump_no_list_separator(agent_instance, serve_http_no_list):
+    agent_instance.connect_warning()
+    assert (['aloha:kikoo:lala']
+            == agent_instance.dump_analyzed_file_list())
+
+def test_agent_av_dump_no_colon(agent_instance, serve_http_no_colon):
+    agent_instance.connect_warning()
+    assert ([('ola', 'alo')]
+            == agent_instance.dump_analyzed_file_list())

@@ -14,6 +14,8 @@ from vespa.node import Node
 from vespa.agent import Agent
 from vespa.agent_bandwidth import Agent_Bandwidth
 
+TEST_STRING = "hello"
+
 
 class SimpleRequestHandler(SocketServer.BaseRequestHandler):
     def handle(self):

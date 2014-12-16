@@ -15,27 +15,21 @@ from vespa.node import Node
 from vespa.agent import Agent
 from vespa.agent_libvirt import Agent_Libvirt
 
+TEST_STRING = "hello"
+PORT = 18089
+PORT_AGENT = 1367
 
-EX_JSON = '''[{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":5,
-"src-port-state":0,"dst-switch":"00:00:00:1a:1e:15:97:00",
-"dst-port":49,"dst-port-state":0,"type":"internal"},
-{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":11,
-"src-port-state":0,"dst-switch":"00:00:00:1a:1e:0d:47:80",
-"dst-port":26,"dst-port-state":0,"type":"internal"},
-{"src-switch":"00:00:00:1c:73:19:bd:d0","src-port":9,
-"src-port-state":0,"dst-switch":"00:00:00:1a:1e:0d:91:c0",
-"dst-port":26,"dst-port-state":0,"type":"internal"}]'''
 
 class SimpleRequestHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         data = self.request.recv(102400) # token receive
-        self.request.send("%s" % EX_JSON)
+        self.request.send("%s" % TEST_STRING)
         time.sleep(0.1) # make sure it finishes receiving request before closing
         self.request.close()
 
 def serve_data():
     SocketServer.TCPServer.allow_reuse_address = True
-    server = SocketServer.TCPServer(('127.0.0.1', 18080), SimpleRequestHandler)
+    server = SocketServer.TCPServer(('127.0.0.1', PORT), SimpleRequestHandler)
     http_server_thread = threading.Thread(target=server.handle_request)
     http_server_thread.setDaemon(True)
     http_server_thread.start()
@@ -48,13 +42,12 @@ def serve_http(request):
         s.server_close()
     request.addfinalizer(fin)
     return s
-@pytest.fixture(scope='module')
 
+@pytest.fixture(scope='module')
 def agent_instance():
-    a = Agent_Libvirt('testnode', "127.0.0.1", 1341, None,
-                                    run=False)
-    a.libvirt_port = 18080
-    a.backend = ("libvirt", a.libvirt_host, 18080, "usertest")
+    a = Agent_Libvirt('testnode', "127.0.0.1", PORT_AGENT, None, run=False)
+    a.libvirt_port = PORT 
+    a.backend = ("libvirt", a.libvirt_host, PORT, "usertest")
     return a
 
 
@@ -68,6 +61,7 @@ def test_agent_libvirt__get_dom_name(agent_instance):
     with pytest.raises(Exception):
         agent_instance._get_dom_name("nodename", agent_instance)
 
+"""
 def test_agent_libvirt_cut_link(agent_instance, serve_http):
     with pytest.raises(libvirt.libvirtError):
         agent_instance.cut_link()
@@ -99,7 +93,4 @@ def test_agent_libvirt_restart_hard(agent_instance, serve_http):
     vm = True
     with pytest.raises(libvirt.libvirtError):
         agent_instance.restart_hard(vm)
-
-
-if __name__ == '__main__':
-    unittest.main()
+"""

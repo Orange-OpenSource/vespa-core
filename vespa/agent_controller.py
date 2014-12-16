@@ -25,8 +25,8 @@ Agent to wrap Gandalf's controller
 """
 
 from logging import *
-from .node import Node
-from .agent import Agent
+from node import Node
+from agent import Agent
 import Queue
 import json
 import urllib

@@ -25,6 +25,7 @@ Grab the core files of the project with the following commands:
 ```bash
 git clone https://github.com/Orange-OpenSource/vespa-core
 cd vespa-core
+pip install -r requirements.txt
 ```
 
 A convenient way to start is to follow the tutorial (branch tutorial) and setup a local environment.
@@ -33,11 +34,13 @@ A convenient way to start is to follow the tutorial (branch tutorial) and setup 
 
 The [documentation](http://vespa-core.readthedocs.org/en/latest/) is available on readthedocs.org.
 
-The API of nodes is described into the code as docstrings. It can be built to another format using the following command in the root directory :
+The API of nodes is described into the code as docstrings. It can be built with the following command in the root directory :
 
 ```bash
-sphinx-apidoc2 -F -o docs vespa
+sphinx-apidoc2 -f -o docs vespa
 ```
+
+Or to another format with a new project (-F option).
 
 ## Tests
 
@@ -59,4 +62,4 @@ Aurélien Wailly, Marc Lacoste, Kévin Grandemange, Aymerik Tabourin.
 
 ## License
 
-The code is released as LGPL v2.1, and contains some external code under MIT license.
+The code is released as LGPL v2.1, and contains some third-party code under MIT license.

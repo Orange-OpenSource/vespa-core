@@ -24,6 +24,3 @@
 class View(object):
     def __init__(self, model):
         self.model = model
-
-if __name__ == '__main__':
-    view = View(Model())

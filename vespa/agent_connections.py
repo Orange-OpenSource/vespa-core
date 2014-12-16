@@ -29,11 +29,11 @@ https://raw.github.com/arthurnn/SynFlood/master/synflood
 """
 
 import socket
-from .log_pipe import *
+from log_pipe import *
 from threading import Thread
 import subprocess
-from .node import Node
-from .agent import Agent
+from node import Node
+from agent import Agent
 import Queue
 import os
 import psutil

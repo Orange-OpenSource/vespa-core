@@ -136,20 +136,30 @@ def server_handler(c, request):
 
 
 class Controller(object):
-    def __init__(self, model, view):
+    def __init__(self, model, view, testmode=False):
         self.model = model
         self.view = view
+        self.testmode = testmode
 
     def handler(self, signum, false):
         if signum == 2:
             debug_init("Controller received shutting down")
-            self.model.destroy()
+            self._shutdown()
+
+    def _shutdown(self):
+        self.model.destroy()
+
+        if not self.testmode:
             exit(0)
+
+        self.server.stop()
 
     def start(self):
         debug5("Started Controller")
 
-        signal.signal(signal.SIGINT, self.handler)
-        server = HttpServer("test server", "0.0.0.0", 8080, server_handler,
-                            self)
-        server.start()
+        if not self.testmode:
+            signal.signal(signal.SIGINT, self.handler)
+
+        self.server = HttpServer("test server", "0.0.0.0", 8080,
+                                 server_handler, self)
+        self.server.start()

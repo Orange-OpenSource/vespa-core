@@ -26,7 +26,7 @@ start for a full API against floodlight.
 """
 
 from logging import *
-from .agent_controller import Agent_Controller
+from agent_controller import Agent_Controller
 import Queue
 import urllib2
 import json

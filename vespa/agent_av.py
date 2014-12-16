@@ -87,32 +87,29 @@ class Agent_AV(Agent):
         :return: The list of analyzed files
         :rtype: list
         """
-        try:
-            agent_vm = self  # self.findAgent('agent_av')
-            raw_msg = agent_vm.send("dump_list|")
-            command = raw_msg.split('|')[0]
-            title_list = raw_msg.split('|')[1]
-            file_list_raw = raw_msg.split('|')[2]
-            file_list = []
-            file_list.append(
-                (title_list.split(LIST_ITEM_SEPARATOR)[0],
-                 title_list.split(LIST_ITEM_SEPARATOR)[1]))
-            # It can be an error
-            if LIST_SEPARATOR not in file_list_raw:
-                return [file_list_raw]
-            # Otherwise, it can be a list
-            for scan_result in file_list_raw.split(LIST_SEPARATOR):
-                # It can be an error, last line is messy
-                if ':' not in scan_result:
-                    continue
-                name = ":".join(
-                    scan_result.split(LIST_ITEM_SEPARATOR)[
-                        0:2]).strip()
-                status = scan_result.split(LIST_ITEM_SEPARATOR)[2].strip()
-                file_list.append((name, status))
-            return file_list
-        except ImportError as e:
-            debug1("[-] Error: %s" % (e))
+        agent_vm = self  # self.findAgent('agent_av')
+        raw_msg = agent_vm.send("dump_list|")
+        command = raw_msg.split('|')[0]
+        title_list = raw_msg.split('|')[1]
+        file_list_raw = raw_msg.split('|')[2]
+        file_list = []
+        file_list.append(
+            (title_list.split(LIST_ITEM_SEPARATOR)[0],
+             title_list.split(LIST_ITEM_SEPARATOR)[1]))
+        # It can be an error
+        if LIST_SEPARATOR not in file_list_raw:
+            return [file_list_raw]
+        # Otherwise, it can be a list
+        for scan_result in file_list_raw.split(LIST_SEPARATOR):
+            # It can be an error, last line is messy
+            if ':' not in scan_result:
+                continue
+            name = ":".join(
+                scan_result.split(LIST_ITEM_SEPARATOR)[
+                    0:2]).strip()
+            status = scan_result.split(LIST_ITEM_SEPARATOR)[2].strip()
+            file_list.append((name, status))
+        return file_list
 
     def isolate_warning(self, vm):
         """Set up the agent for interactions with the hypervisor
